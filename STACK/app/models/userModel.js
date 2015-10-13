@@ -6,11 +6,12 @@
 var crypto = require('crypto');
 
 
-
 //Basic User Model
 var mongoose = require('mongoose');
+var Schema   = mongoose.Schema;
 
-var UserSchema = mongoose.Schema({
+
+var UserSchema = Schema({
 	
 	email 				: String,  ///users' unique email
 	password  			: String,  ///Users' password... will later be md5-hashed
@@ -19,9 +20,9 @@ var UserSchema = mongoose.Schema({
 	username			: String,  ///User's username
 	age					: Number,  ///User's age
 	onPhoneSession		: Boolean, ///Set to true when user is logged in phone
-	sessionCode			: String   ///Phone's session code 
-	requestHistory      : [{ type: Schema.Types.ObjectId, ref: 'Request' }], //A list of all requests this user is linked to
-	hasActiveRequest    : { yes : {type : boolean, default : false}, current : { type: Schema.Types.ObjectId, ref: 'Request' }}
+	sessionCode			: String,   ///Phone's session code 
+	requestHistory      : { type: Schema.Types.ObjectId }, //A list of all requests this user is linked to
+	hasActiveRequest    : { yes : {type : Boolean, default : false}, current : { type: Schema.Types.ObjectId, ref: 'Request' }}
 });
 
 

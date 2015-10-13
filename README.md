@@ -5,12 +5,11 @@ AUTHORS
 [chocof](https://github.com/chocof),
 [siderisng](https://github.com/siderisng),
 [gejioka](https://github.com/gejioka),
-[panagiotis-tzimotoudis](https://github.com/panagiotis-tzimotoudis)
-
+[ptzimotou](https://github.com/ptzimotou)
 
 Description
 -------
-API and frontend for mySearch a new project created by G13 team. This project aims to build an android app to 
+API and frontend for mySearch a new project created by MontyBits team. This project aims to build an android app to 
 provide user with attractions, clubs, restaurants, theaters, etc near his location.
 
 Starting Up

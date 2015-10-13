@@ -1,0 +1,55 @@
+////////////////////////////////////////////////////////////////
+//////////AUTHORS :   chocof (https://github.com/chocof), //////
+//////////File    :   views/mainView.jade           ////////////
+////////////////////////////////////////////////////////////////
+
+doctype 
+html(ng-app='mySearch')
+head
+    title mySearch
+
+    //Appearance stuff for dem feels
+    link(rel='stylesheet', type="text/css", href='/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/font-awesome/css/font-awesome.min.css')
+    link(rel="stylesheet" ,type="text/css", href="/reveal-highlight-themes/styles/monokai_sublime.css" id="highlight-theme")
+    link(rel="stylesheet" href="/angular-ui-notification/dist/angular-ui-notification.min.css")
+
+    //WOW
+
+    style
+        include body.css
+    //Very bootstrap 
+    script(src="/jquery/dist/jquery.js")
+    script(src="/bootstrap/dist/js/bootstrap.js")
+
+
+    //Much Angular
+    script(src='/angular/angular.min.js')
+    script(src="/angular-resource/angular-resource.js")
+    script(src='/angular-bootstrap/ui-bootstrap-tpls.min.js')
+
+    //ui router to handle routing
+    script(src='/angular-ui-router/release/angular-ui-router.min.js')
+    
+    //for hashing passwords
+    script(src="/cryptojslib/rollups/md5.js")
+    script(src="/cryptojslib/components/enc-base64-min.js")
+
+    //for notifications
+    script(src="/angular-ui-notification/dist/angular-ui-notification.min.js")
+
+    //Main App 
+    script(src='/js/app/userApp.js')
+    
+    //services
+    script(src='/js/services/authSrvc.js')
+    script(src='/js/services/usrSrvc.js')
+
+    //controllers    
+    script(src='/js/controllers/sigLogCtrl.js')  
+    script(src='/js/controllers/userCtrl.js') 
+
+    base(href='/')
+    body
+        //inject other views here
+        div(ui-view)      

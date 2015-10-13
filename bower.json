@@ -1,0 +1,27 @@
+{
+  "name": "mySearch-stack",
+  "main": "index.js",
+  "version": "0.0.0",
+  "authors": [
+    "chocof<fotisdtsokos@gmail.com>"
+  ],
+  "description": "mySearch website will include user information,map of locations in which he has been Graphs, etc",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "~0.13.3",
+    "angular-resource": "~1.4.5",
+    "angular-ui-notification": "~0.0.14",
+    "angular-ui-router": "~0.2.15",
+    "bootstrap": "~3.3.5",
+    "cryptojslib": "~3.1.2",
+    "font-awesome": "~4.4.0",
+    "reveal-highlight-themes": "~8.4.0"
+  }
+}

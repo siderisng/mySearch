@@ -23,8 +23,10 @@ div(ng-controller="homeCtrl" id="content")
 							label Password
 							input.form-control(type='password', name='password',ng-model='passwordLog')
 						
-							button.btn.btn-default.btn-lg(ng-click='login()') Login
-	div(id = "signupScreen")
+							button.btn.btn-default.btn-lg(ng-click='login()' type='submit') Login
+			div(ng-show="!registerBool")
+				button.btn.alert.btn-sm(ng-click='register()', name="register" type='submit') Don't have an account?	
+	div(id = "signupScreen", ng-show="registerBool")
 		div(class="page-header")
 			h4 SignUp to mySearch
 		.container
@@ -71,3 +73,4 @@ div(ng-controller="homeCtrl" id="content")
 				.form-group
 					.col-sm-10		
 						button.btn.btn-default.btn-lg(ng-if="!inputForm.email.$error.required && !inputForm.username.$error.required && !inputForm.password.$error.required && !inputForm.passwordRep.$error.required", ng-click='signup()') Signup
+								

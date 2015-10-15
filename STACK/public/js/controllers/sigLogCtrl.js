@@ -3,6 +3,8 @@
 */
 angular.module('mySearch')
 	.controller('homeCtrl',['$scope', "Notification",'loginSrvc','signupSrvc', '$state', function($scope, Notification, loginSrvc, signupSrvc, $state){
+		
+		$scope.registerBool = false;
 
 		//login user in function
 		$scope.login = function(){
@@ -49,12 +51,15 @@ angular.module('mySearch')
 			}
   		}
 
-
-
   		function hashPwd(password){
 
   			var hashed = CryptoJS.MD5(password);
     		return (hashed.toString(CryptoJS.enc.Base64));
   		}
 
+  		$scope.register = function (){
+        	$scope.registerBool = !$scope.registerBool;
+    	};
+
+  		
 }])

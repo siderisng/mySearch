@@ -8,7 +8,7 @@
 /*!
   Basic module for the frontend
 */
-var mySearch = angular.module('mySearch', ['ui.bootstrap', 'ui.router','ngResource','ui-notification']);
+var mySearch = angular.module('mySearch', ['ui.bootstrap','ui.router','ngResource','ui-notification']);
 
 
 mySearch

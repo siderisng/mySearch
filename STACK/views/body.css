@@ -3,7 +3,8 @@ body {
 	width:100%;
 	background-image : url("/img/bg.jpg");
 	background-size: 100% auto;
-	color:#fff;
+	color:#fff!important;
+	font-family: 'Open Sans Condensed', sans-serif, Arial;
 }
 
 #content{
@@ -14,6 +15,18 @@ body {
 
 }
 
+#nav-left{
+	float:left;
+
+}
+
+h1{
+	font-family:Helvetica, sans-serif!important;
+}
+
+#nav-left img{
+	width:300px;
+}
 
 
 #loginScreen {

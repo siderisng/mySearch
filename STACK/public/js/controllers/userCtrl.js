@@ -10,8 +10,7 @@ angular.module('mySearch')
 	         	//Preview User Data
 	        	$scope.user = resp.info;
 	        	console.log($scope.user)
-
-	        })
+			})
 			.error(function(err){
 		        console.log(err)   	
 		    })

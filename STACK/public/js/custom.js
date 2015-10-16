@@ -1,7 +1,7 @@
 function showDiv() {  
-    $('#signupModal').fadeIn('slow');
+    $('#signup').fadeIn('slow');
 }
 
 function hideDiv() {  
-    $('#signupModal').fadeOut('slow');
+    $('#signup').fadeOut('slow');
 }

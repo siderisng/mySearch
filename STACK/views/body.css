@@ -8,23 +8,40 @@ body {
 }
 
 #content{
-	background-color: rgba(0,0,0,0.4);
+	/*background-color: rgba(0,0,0,0.4);*/
 	padding: 20px 40px;
 	margin:0 auto;
+	height: 100%;
+    position: fixed;
+    width: 100%;
 
 
 }
 
-#signupModal{
+#signup{
+	position:fixed;
+	top:0;
+	right:0;
+	height:100%;
+	width:100%;
 	display:none;
+	background:rgba(0,0,0,0.7);
+
+}
+
+#signupModal{
+	display:block;
 	height:auto;
 	width:500px;
 	left:50%;
 	position:absolute;
 	top:20%;
 	margin-left:-250px;
-	background:rgba(0,0,0,0.7);
-	color: #fff;
+	background:rgba(255,255,255,1);
+	color: #000;
+	    -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    border: 1px solid rgba (0,0,0,0.2);
 	border-radius:10px;
 	
 }
@@ -37,8 +54,10 @@ body {
 }
 
 #open{
-	color:#000;
+	color:#fff;
 	margin-top:50px;
+	font-style: italic;
+
 }
 
 #nav-left{

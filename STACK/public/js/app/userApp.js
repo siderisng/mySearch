@@ -33,9 +33,9 @@ mySearch
 
             //---------private states---------
             //user profile
-            .state('userProf',{
+            .state('menu',{
               url : '/user/info',
-              templateUrl : 'profile',
+              templateUrl : 'menu',
               controller : 'userCtrl'
             })
             //edit info

@@ -27,9 +27,15 @@ module.exports = function(app) {
 	})
 
 	//send to edit user
-	app.get('/profile',function(req,res){
+	app.get('/menu',function(req,res){
 		
 		res.render('menu.jade');	
+		
+	})
+
+	//send to edit user
+	app.get('/info',function(req,res){
+		res.render('userInfo.jade');	
 		
 	})
 

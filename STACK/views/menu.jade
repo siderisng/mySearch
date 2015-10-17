@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////
-////////Author : chocof		//////////////////////
+////////Author : siderisng,chocof		//////////////////////
 /////// File   : views/menu.js ///////////////////////
 //////////////////////////////////////////////////////
 
@@ -37,16 +37,17 @@ div(ng-controller="userCtrl",class="jumbotron", ng-init="__init__()")
 						li
 							br
 							br
-							button.btn.btn-inverse.navbar-btn(ng-click="logout()")
+							a(ng-click="logout()" href='#')
 								span.glyphicon.glyphicon-log-out Logout
 	div 
 		col-sm-6.col-sm-offset-3
 			// Edit form
+			h2(class='pinfo') Personal Info
 			form
 				.form-group
 					h3 Email : {{user.email}}
 				.form-group
-					h3 Userame : {{user.username}}
+					h3 Username : {{user.username}}
 				.form-group
 					h3 Name : {{user.name}}
 				.form-group

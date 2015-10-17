@@ -15,7 +15,7 @@ angular.module('mySearch')
 			loginSrvc.login($scope.usernameLog,hashedPwd)
 				.then(
 			        function(resp){
-			           $state.go("userProf")
+			           $state.go("menu")
 			        },
 			        function(err){
 			           Notification.error(err.data.errorMessage);
@@ -34,7 +34,7 @@ angular.module('mySearch')
 				signupSrvc.signup($scope.username, $scope.email, hashedPwd, $scope.name, $scope.surname, $scope.age)
 					.then(
 				        function(resp){
-				        	$state.go("userProf")
+				        	$state.go("menu")
 				        },
 				        function(err){
 				           	

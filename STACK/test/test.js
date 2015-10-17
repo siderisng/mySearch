@@ -68,15 +68,16 @@ describe('================== mySearch API ==================\n\n',function(){
 
 	after(function (done,err) {
         //Remove User and close connection with Database
-        User.remove({_id:tester._id}).exec(function(err){
-            expect(err).to.not.exist;
-	            db.connection.close(function (err) {
-	               expect(err).to.not.exist;
-	               done();
-		    	});
-		    });
+        User.findByIdAndRemove(tester._id, function (err){
+    		expect(err).to.not.exist;
+            db.connection.close(function (err) {
+               expect(err).to.not.exist;
+               done();
+	    	});
+		});
 	});
 
+	//--------------------API/V1/LOGIN------------------------//
 
 
 	describe('------API api/v1/login------',function(){
@@ -91,6 +92,7 @@ describe('================== mySearch API ==================\n\n',function(){
 	                expect(res).to.exist;
 	                expect(res.status).to.equal(200);
 	                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
+	                cookie = res.headers['set-cookie'];
 	                done();
 	            });
 	    });
@@ -105,10 +107,11 @@ describe('================== mySearch API ==================\n\n',function(){
 	                expect(res).to.exist;
 	                expect(res.status).to.equal(200);
 	                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
+	                cookie = res.headers['set-cookie'];
 	                done();
 	            });
 	    });
-
+	
 		it('Should block non-registered users',function(done){
 	        request
 	            .post('http://localhost:8000/api/v1/login')
@@ -140,15 +143,21 @@ describe('================== mySearch API ==================\n\n',function(){
 		
 	});
 
+
+	//--------------------API/V1/SIGNUP------------------------//
+
+
+
+
 	describe('------API api/v1/signup------',function(){
 		this.timeout(20000)
 
 		it('Should succesfully sign-up new users',function(done){
-	        var newUser= User({
+	        var newUser ={
 				email 		: 	chance.email({domain : 'foo.com'}),
 				password 	: 	chance.string(),
 				username	: 	chance.first() 
-			});	
+			}
 
 	        request
 	            .post('http://localhost:8000/api/v1/signup')
@@ -162,7 +171,8 @@ describe('================== mySearch API ==================\n\n',function(){
 	                expect(res.status).to.equal(200);
 	                expect(res.body.successMessage).to.contain("You successfully signed up")
 	                //delete user now
-	                User.remove({_id : newUser._id}).exec(function(err){
+
+	                User.remove({username : newUser.username}, function (err,noob){
 	                	expect(err).to.not.exist;
 	                	done();
 	                })
@@ -201,9 +211,12 @@ describe('================== mySearch API ==================\n\n',function(){
 	    });
 	});
 	
+
+	//--------------------API/V1/USER------------------------//
+
 	describe('------API api/v1/user------',function(){
 		this.timeout(20000)
-
+		////////////GET  REQUEST/////////////////
 		describe('GET Request',function(){
 
 			it('Should only allow authorized users',function(done){
@@ -213,7 +226,7 @@ describe('================== mySearch API ==================\n\n',function(){
 		            .end(function(err,res){
 		                expect(err).to.exist;
 		                expect(res.status).to.equal(401);
-		                expect(err.body.message).to.equal("You are not authorized to access this content");
+		                expect(res.body.message).to.equal("You are not authorized to access this content");
 		                done();		               
 		            });
 		    });
@@ -234,6 +247,71 @@ describe('================== mySearch API ==================\n\n',function(){
 						done();		               
 		            });
 		    });
-		});	
+		});
+
+		////////////POST REQUEST/////////////////
+		describe('POST Request',function(done){
+			
+
+			it('Should only allow authorized users',function(done){
+		        request
+		            .post('http://localhost:8000/api/v1/user')
+		            .send({data : 'No Data for you you bandit'})
+		            .set('cookie',fakeCookie)
+		            .end(function(err,res){
+		                expect(err).to.exist;
+		                expect(res.status).to.equal(401);
+		                expect(res.body.message).to.equal("You are not authorized to access this content");
+		                done();		               
+		            });
+		    });
+
+			it('Should change user data',function(done){
+		        var toChange = {
+		        				username 	: chance.first(),
+								email 		: chance.email({domain : 'ch-ch-ch-changes.com'}),		
+								name		: chance.first(),
+								surname		: chance.last(),
+								age 		: chance.age()
+							}
+		        request
+		            .post('http://localhost:8000/api/v1/user')
+		            .send(toChange)
+		            .set('cookie',cookie)
+		            .end(function(err,res){
+		                //check if request ok
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                //get updated document	
+		                User.findOne({_id : tester._id},function(err, updatedTester){
+			                tester = updatedTester;
+			                expect(toChange.email).to.equal(tester.email)
+			                expect(toChange.username).to.equal(tester.username)
+			                expect(toChange.name).to.equal(tester.name)
+			                expect(toChange.surname).to.equal(tester.surname)
+			                expect(toChange.age).to.equal(tester.age)
+			                done();
+		                })		               
+		            });
+		    });
+
+
+			it('Should stop users trying to change their id',function(done){
+		        request
+		            .post('http://localhost:8000/api/v1/user')
+		            .send({	id : 'edwardSnowden_ID',
+		             		_id : 'Presidents_ID'})
+		            .set('cookie',cookie)
+		            .end(function(err,res){
+		                //check if request ok
+		                expect(err).to.exist;
+		                expect(res.status).to.equal(400);
+		                expect(res.body.errorMessage).to.equal("You can't change your id")	               
+		            	done();
+		            });
+		    });
+
+
+		})	
 	})
 });

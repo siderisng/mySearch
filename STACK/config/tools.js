@@ -16,17 +16,17 @@ module.exports = {
 	//private content
 	authenticateUser : function(req,res,next){
 
-		if (!req.isAuthenticated){
-
-			 var possibleThreatIp = req.headers['x-forwarded-for'] || 
-				req.connection.remoteAddress || 
-				req.socket.remoteAddress ||
-				req.connection.socket.remoteAddress;
-			console.log("User with IP "+possibleThreatIp+" tried to access account of user " + user.username)
-			res.status(401).send({message : "You are not authorized to access this content"});
-			return;
-		}else
+		if (req.isAuthenticated()){
 			return next();
+		}else{
+			var possibleThreatIp = req.headers['x-forwarded-for'] || 
+			req.connection.remoteAddress || 
+			req.socket.remoteAddress ||
+			req.connection.socket.remoteAddress;
+			console.log("User with IP "+possibleThreatIp+" tried to access private content")
+			res.status(401).send({message : "You are not authorized to access this content"});
+			return		
+		}
 	},
 
 	//Authentication header : username=<user_username>&sessionCode=<User_session_password>

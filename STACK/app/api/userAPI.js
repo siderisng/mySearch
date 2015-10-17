@@ -231,7 +231,7 @@ module.exports = function(app,passport,tools, privateData) {
 
 				for (attr in toChangeAttrs){
 					//if user wants to change password
-					if (attr === 'password'){
+					if (attr === 'password' && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
 						user.password = User.generateHash(toChangeAttrs[attr]);
 						continue;
 					}
@@ -240,14 +240,16 @@ module.exports = function(app,passport,tools, privateData) {
 						user[attr] = toChangeAttrs[attr];
 
 					//check for malicius use
-					else if ((attr === 'id')||(attr === '_id'))
+					else if (attr === 'id' || attr === '_id') {
 						console.log("User with email " + user.email + " and username " 
 							+ user.username + " is trying to change his id.");
-
+						res.status(400).send({errorMessage : "You can't change your id"})
+						return
+					}
 				}
 				
 				//save user
-				user.save(function(req, res){
+				user.save(function(req, user){
 					if (err){
 						console.log("Getting User Info  Error : ",e.message)
 		      	    	res.status(500).send({errorMessage : err.message})
@@ -265,7 +267,7 @@ module.exports = function(app,passport,tools, privateData) {
 
 		.get(tools.authenticateUser, function(req,res){
 
-			User.findById(req.user, function(err,res){
+			User.findById(req.user, function(err,user){
 				if (err){
 					console.log("Getting User History Error : ",e.message)
 	      	    	res.status(500).send({errorMessage : err.message})

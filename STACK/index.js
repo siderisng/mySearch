@@ -68,9 +68,6 @@ app.use(passport.session());
 
 
 
-
-
-
 //DATABASE STUFF
 // I used my mongolab account to host a database you can create your own in mongolab.com(hooray for this)
 

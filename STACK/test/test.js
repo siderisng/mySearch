@@ -41,43 +41,34 @@ describe('================== mySearch API ==================\n\n',function(){
 		tester.save(function(err){
 			if (err){
 				console.log("✗ Couldn't Save User due to error : " + err);
-				done();
-			}
-			console.log("✓ Succesfully Saved Fake User ");
-
-			//see if password is valid
-			if (!(tester.validPassword(notYetHashed))){
-                console.log('✗ Invalid Password Encryption')
-                done();
-            }
-            
-            //now login user
-            request
-                .post('http://localhost:8000/api/v1/signup')
-                .send({
-                    password: notYetHashed , username: tester.username
-                })
-                .end(function(err,res){
-                    if(err){
-                        console.log('✗ Couldn\'t log user in session');
-                    	done();
-                    }else{
-                    	cookie = res.headers['set-cookie'];
-                    	console.log('✓ Logged Fake User In');
-                		done();
-                	}
-                });
+			}else{
+				console.log("✓ Succesfully Saved Fake User ");
+				//see if password is valid
+				if (!(tester.validPassword(notYetHashed))){
+	                console.log('✗ Invalid Password Encryption')
+	            }else{
+		            //now login user
+		            request
+		                .post('http://localhost:8000/api/v1/login')
+		                .send({
+		                    password: notYetHashed , username: tester.username
+		                })
+		                .end(function(err,res){
+		                    if(err){
+		                        console.log('✗ Couldn\'t log user in session');
+		                    
+		                    }else{
+		                    	cookie = res.headers['set-cookie'];
+		                    	console.log('✓ Logged Fake User In');
+		                    }
+		                	done();
+		                });
+        		}
+        	}
         })
 	});
 	
 
-	describe('Starting Testing',function(){
-		it('Shall be extra cool',function(done){
-			console.log("Yeah Bitches that be true")
-			done();
-		})
-
-	});
 
 	after(function (done,err) {
         //Remove User and close connection with Database
@@ -87,16 +78,47 @@ describe('================== mySearch API ==================\n\n',function(){
             }
             else{
 	            console.log('✓ Removed fake user from Database \n');
+	            
 	            db.connection.close(function () {
 	                if(err){
 	                    console.log('✗ Database : Still Open Due To error : '+err);
 	                }else{
 		                console.log('✓ Database: Closed');
-		                done();
-	            	}
-	            });
-        	}
+		           	}
+		    		done();
+		    	});
+		    }		
         });
 
     });
+
+
+
+	describe('API api/v1/login',function(){
+		it('Should block non-registered users',function(done){
+	        request
+	            .post('http://localhost:8000/api/v1/login')
+	            .send({
+	                password: 'wrong_password' , email: 'wrong@email'
+	            })
+	            .end(function(err,res){
+	                if (err && err.status === 400 || err.status === 401) {
+	                    res.text.should.containEql('Error: No user found with these credentials');
+	                    console.log('✓ Invalid User Was Blocked');
+					}
+	                else if (err) {
+	                    console.log('✗ An Error Happened : ' + err)
+	                }else{
+	                	console.log('✗ Invalid User Logged In ')	
+	                }
+	                done();
+	            });
+	    });
+
+		it('Shall be extra cool',function(done){
+			console.log("Yeah Bitches that be true")
+			done();
+		})
+
+	});
 });

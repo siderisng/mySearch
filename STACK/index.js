@@ -45,17 +45,11 @@ var db_options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: TI
         replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : TIMEOUT_MS } } 
     };
 
-
-
-
-
 //configuration settings for passport
 var configSession = require('./config/session.js')
-
-var passport = require('passport');
-require('./config/passportConfig')(passport); //We need to create passport file for configuration 
-
 var flash    = require('connect-flash');
+var passport = require('passport');
+
 var session  = require('express-session');
 
 //init passport stuff
@@ -66,9 +60,12 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(flash()); 
+
+require('./config/passportConfig')(passport); //We need to create passport file for configuration 
 app.use(passport.initialize());
 app.use(passport.session()); 
-app.use(flash()); 
+
 
 
 

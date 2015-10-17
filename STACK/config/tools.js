@@ -25,8 +25,8 @@ module.exports = {
 			console.log("User with IP "+possibleThreatIp+" tried to access account of user " + user.username)
 			res.status(401).send({message : "You are not authorized to access this content"});
 			return;
-		}
-		return next();
+		}else
+			return next();
 	},
 
 	//Authentication header : username=<user_username>&sessionCode=<User_session_password>

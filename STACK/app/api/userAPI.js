@@ -99,21 +99,19 @@ module.exports = function(app,passport,tools, privateData) {
  		*     {errorMessage: ERROR_MESSAGE }
  		*/
 		.post(function(req, res, next) { //register user with passport
-			passport.authenticate('login', function(err, user, info) {
-				
+			passport.authenticate('login',function(err, user, info) {
+				console.log(info)				
 				//find errors(if they exist) and send message
 				if (err){
 					console.log("Login Error : ",e.message)
-					res.status(500).send({errorMessage : err.message})
+					res.status(500).send({errorMessage : "Couldn't Login"}); 
 					return;
 				};
 				if(!user){
-					errMess = req.flash('loginMessage')
-					res.status(400).send({errorMessage : errMess[0]}); 
+					res.status(400).send({errorMessage : "Couldn't Login"}); 
 					return;
 				}
 				
-				//log user in session
 				req.logIn(user, function(err) {
 					
 					console.log('[+]User with username '+user.username+' successfully logged in!!!')
@@ -161,8 +159,6 @@ module.exports = function(app,passport,tools, privateData) {
  		*     {message: ERROR_MESSAGE }
  		*/
 		.get(tools.authenticateUser,function(req,res){
-
-
 
 			//first find user by id
 			User.findById(req.user,function(err, user){

@@ -50,7 +50,6 @@ module.exports = function(app,tools, privateData) {
  			var username = req.body.username
  			var password = req.body.password
 
- 			console.log(req.body)
  			//user can login with either his namespace or email so check for both
         	User.findOne({$or : [{ 'email'  :  username },{'username' : username}]}, function(err, user) {
 	            if (err){
@@ -74,6 +73,7 @@ module.exports = function(app,tools, privateData) {
 	                    req.connection.socket.remoteAddress;
 	                console.log("User with IP "+possibleThreatIp+" tried to access account of user " + user.username)
 	            	res.status(401).send({errorMessage : "Passwords don't match please try again"})
+	            	return;
 	            }	
 
 	            //if ok state that user started a new session
@@ -249,7 +249,7 @@ module.exports = function(app,tools, privateData) {
 		*@apiError 401 Authorization Failed
         *@apiError 500 Internal Server Error
         *@apiErrorExample {json} Error-Response:
- 		*     {message: ERROR_MESSAGE }
+ 		*     {errorMessage: ERROR_MESSAGE }
  		*/
 		.post(tools.authenticateUserPhone, function(req,res,next){
 			var sessionData = qs.parse(req.headers.authorization)
@@ -268,17 +268,27 @@ module.exports = function(app,tools, privateData) {
 
 				for ( attr in toChangeAttrs ) {
 					//if user wants to change password
-					if ( attr === 'password' ) {
-						user.password = user.generateHash( toChangeAttrs[attr] );
+					if (attr === 'password' && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
+						user.password = user.generateHash(toChangeAttrs[attr]);
 						continue;
 					}
 
 					//else set normally
-					if ( arrayOfAllowedAttrs.indexOf( attr ) >= 0 )
-						user[attr] = toChangeAttrs[ attr ];
+					if (arrayOfAllowedAttrs.indexOf(attr) >= 0 && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
+						if (attr == 'email' && !tools.validEmail(toChangeAttrs[attr])){
+							res.status(400).send({errorMessage : "This is not a valid email"})
+							return
+						}
+
+						user[attr] = toChangeAttrs[attr];
+					}
 					//check for malicius use
-					else if ( ( attr === 'id') || ( attr === '_id' ) )
-						console.log( "User with email " + user.email + " and username " + user.username + " is trying to change his id." );
+					else if (attr === 'id' || attr === '_id') {
+						console.log("User with email " + user.email + " and username " 
+							+ user.username + " is trying to change his id.");
+						res.status(400).send({errorMessage : "You can't change your id"})
+						return
+					}
 				}
 
 				//save user
@@ -293,5 +303,37 @@ module.exports = function(app,tools, privateData) {
 				});
 			});
 		});
+
+
+	app.route("/api/v1/phone/user/logout")
+
+		.get(tools.authenticateUserPhone, function(req,res){
+			var sessionData = qs.parse(req.headers.authorization)
+
+			//find user by username
+			User.findOne( {"username" : sessionData.username}, function( err, user ) {
+				if ( err ) {
+						console.log( "Error during logout: ", err.message)
+						res.status(500).send( {errorMessage : err.message} )
+						return;
+					}
+				user.sessionCode = "";
+				user.onPhoneSession  = false;	
+					
+				user.save(function(err){
+					if ( err ) {
+						console.log( "Error during logout: ", err.message)
+						res.status(500).send( {errorMessage : err.message} )
+						return;
+					}
+					console.log("User "+user.username+"logged out");
+					res.send({successMessage : "You Logged Out Of Session"})	
+				})	
+
+
+			})
+
+		})
+
 
 }

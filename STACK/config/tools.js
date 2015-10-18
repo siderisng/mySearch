@@ -32,6 +32,11 @@ module.exports = {
 	//Authentication header : username=<user_username>&sessionCode=<User_session_password>
 	authenticateUserPhone : function(req,res,next){
 		
+
+		if (!req.headers.authorization || req.headers.authorization == ""){
+				res.status(400).send({message : "You have to set authorization header"})
+				return
+		}
 		var sessionData = qs.parse(req.headers.authorization)
 		
 
@@ -50,6 +55,7 @@ module.exports = {
 			if (!user.onPhoneSession){
 				console.log("[-]User " + user.username +" tried to access private content while out of session")
 				res.status(401).send({ message : "Please login first"})
+				return
 			}
 			
 			if (user.sessionCode != sessionData.sessionCode){

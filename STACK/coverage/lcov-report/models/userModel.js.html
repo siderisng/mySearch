@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for models/userModel.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">models/</a> userModel.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">58.33% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>7/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">58.33% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>7/12</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/////////////////////////////////////////////////////////////
+//////////AUTHORS :   chocof (https://github.com/chocof)/////
+//////////File :  app/api/userModel.js 		        /////////
+/////////////////////////////////////////////////////////////
+&nbsp;
+var crypto = require('crypto');
+&nbsp;
+&nbsp;
+//Basic User Model
+var mongoose = require('mongoose');
+var Schema   = mongoose.Schema;
+&nbsp;
+&nbsp;
+var UserSchema = Schema({
+	
+	email 				: String,  ///users' unique email
+	password  			: String,  ///Users' password... will later be md5-hashed
+	name				: String,  ///Users' name
+	surname				: String,  ///Users's surname
+	username			: String,  ///User's username
+	age					: Number,  ///User's age
+	onPhoneSession		: Boolean, ///Set to true when user is logged in phone
+	sessionCode			: String,   ///Phone's session code 
+	requestHistory      : { type: Schema.Types.ObjectId }, //A list of all requests this user is linked to
+	hasActiveRequest    : { yes : {type : Boolean, default : false}, current : { type: Schema.Types.ObjectId, ref: 'Request' }}
+});
+&nbsp;
+&nbsp;
+&nbsp;
+//Create md5 hashing with crypto
+UserSchema.methods.generateHash = <span class="fstat-no" title="function not covered" >function(password) {</span>
+<span class="cstat-no" title="statement not covered" >    var hash = crypto.createHash('md5');</span>
+<span class="cstat-no" title="statement not covered" >    return hash.update(password).digest('hex');</span>
+};
+&nbsp;
+// check if password is valid
+UserSchema.methods.validPassword = <span class="fstat-no" title="function not covered" >function(password) {</span>
+<span class="cstat-no" title="statement not covered" >    var hash = crypto.createHash('md5');	</span>
+<span class="cstat-no" title="statement not covered" >	var input = hash.update(password).digest('hex')</span>
+	//compare to hashed password
+<span class="cstat-no" title="statement not covered" >    return (input === this.password);</span>
+};
+&nbsp;
+module.exports = mongoose.model('User', UserSchema);
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Oct 18 2015 14:25:34 GMT+0300 (EEST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

@@ -52,6 +52,11 @@ var passport = require('passport');
 
 var session  = require('express-session');
 
+
+//load my tools
+var tools = require('./config/tools.js')
+
+
 //init passport stuff
 app.use(session({
     secret: configSession.secret,
@@ -62,9 +67,12 @@ app.use(session({
 }));
 app.use(flash()); 
 
-require('./config/passportConfig')(passport); //We need to create passport file for configuration 
+
+
+require('./config/passportConfig')(passport, tools); //We need to create passport file for configuration 
 app.use(passport.initialize());
 app.use(passport.session()); 
+
 
 
 
@@ -87,8 +95,6 @@ var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:')); //check errors
 
 
-//load my tools
-var tools = require('./config/tools.js')
 
 
 //--------------------HTTP CONNECTION--------------------//

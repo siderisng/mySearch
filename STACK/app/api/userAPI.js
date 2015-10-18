@@ -232,13 +232,18 @@ module.exports = function(app,passport,tools, privateData) {
 				for (attr in toChangeAttrs){
 					//if user wants to change password
 					if (attr === 'password' && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
-						user.password = User.generateHash(toChangeAttrs[attr]);
+						user.password = user.generateHash(toChangeAttrs[attr]);
 						continue;
 					}
 					//else set normally
-					if (arrayOfAllowedAttrs.indexOf(attr) >= 0 && toChangeAttrs[attr] && toChangeAttrs[attr] != "")
-						user[attr] = toChangeAttrs[attr];
+					if (arrayOfAllowedAttrs.indexOf(attr) >= 0 && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
+						if (attr == 'email' && !tools.validEmail(toChangeAttrs[attr])){
+							res.status(400).send({errorMessage : "This is not a valid email"})
+							return
+						}
 
+						user[attr] = toChangeAttrs[attr];
+					}
 					//check for malicius use
 					else if (attr === 'id' || attr === '_id') {
 						console.log("User with email " + user.email + " and username " 
@@ -262,7 +267,7 @@ module.exports = function(app,passport,tools, privateData) {
 		});
 
 
-	app.route('api/v1/user/history/location')
+	app.route('/api/v1/user/history/location')
 
 
 		.get(tools.authenticateUser, function(req,res){
@@ -283,24 +288,32 @@ module.exports = function(app,passport,tools, privateData) {
 		})
 	
 
-	app.route('api/v1/user/history/searches')
+	app.route('/api/v1/user/history/searches')
 
 
-	.get(tools.authenticateUser, function(req,res){
+		.get(tools.authenticateUser, function(req,res){
 
-		User.findById(req.user, function(err,res){
-			if (err){
-				console.log("Getting User History Error : ",e.message)
-      	    	res.status(500).send({errorMessage : err.message})
-				return;
+			User.findById(req.user, function(err,res){
+				if (err){
+					console.log("Getting User History Error : ",e.message)
+	      	    	res.status(500).send({errorMessage : err.message})
+					return;
 
-			}
+				}
 
-			res.send({history : user.searchesHistory })
-
+				res.send({history : user.searchesHistory })
+			})
 
 		})
-
-	})
 	
+
+	app.route('/api/v1/user/logout')
+		
+		.get(tools.authenticateUser,function(req,res){
+				req.logout();
+				res.send({message : "User successfully logged out"})
+				return
+		})
+
+
 }

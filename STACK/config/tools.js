@@ -15,7 +15,7 @@ module.exports = {
 	//this function will be used to authenticate user when he tries to access 
 	//private content
 	authenticateUser : function(req,res,next){
-
+		
 		if (req.isAuthenticated()){
 			return next();
 		}else{
@@ -66,7 +66,12 @@ module.exports = {
 
 		})
 		
-	}
+	},
+
+	validEmail : function (email){
+        var re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        return re.test(email)
+    }
 
 
 }

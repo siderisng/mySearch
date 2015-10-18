@@ -10,7 +10,7 @@ var User          = require('../app/models/userModel');
 
 
 //Export Function so anyone can see
-module.exports    = function(passport) {
+module.exports    = function(passport, tools) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -38,7 +38,9 @@ module.exports    = function(passport) {
             //check if request is ok
             if (!req.body.username || !email)
                 return done(null, false, req.flash('signupMessage', 'You must have both an email and username'));
-                    
+            if (!tools.validEmail(email))
+                return done(null, false, req.flash('signupMessage', 'This is not a valid email'));
+
             //find if anybody else is using this email or username
             User
                 .findOne({ $or: [ { 'username': req.body.username }, { 'email': email } ] },function(err,user){
@@ -114,6 +116,9 @@ module.exports    = function(passport) {
         });
 
     }));
+
+    
+
 
 };
 

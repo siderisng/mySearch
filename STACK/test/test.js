@@ -195,7 +195,8 @@ describe('================== mySearch API ==================\n\n',function(){
 	                })
 	    });
 
-	    it('Block Users with the same username',function(done){
+
+		it('Block Users with the same username',function(done){
 	    	request
 	            .post('http://localhost:8000/api/v1/signup')
 	            .send({
@@ -209,6 +210,22 @@ describe('================== mySearch API ==================\n\n',function(){
 	                done();
 	            })
 	    });
+
+		it('Block Users with invalid email',function(done){
+	    	request
+	            .post('http://localhost:8000/api/v1/signup')
+	            .send({
+	                password: tester.password , 
+	                email: "I_don_t_know_how_to_email",
+	                username : chance.first()
+	            })
+	            .end(function(err,res){
+	                expect(err).to.exist;
+	                expect(res.status).to.equal(400);
+	                done();
+	                })
+	    });
+
 	});
 	
 
@@ -311,7 +328,148 @@ describe('================== mySearch API ==================\n\n',function(){
 		            });
 		    });
 
+			it("Should not let users add data that don't exit",function(done){
+		        var toChange = {
+		        				username 	: chance.first(),
+								email 		: chance.email({domain : 'ch-ch-ch-changes.com'}),		
+								name		: chance.first(),
+								surname		: chance.last(),
+								age 		: chance.age(),
+								style		: "Unique",
+								title		: "Fashion-Icon",
+								friends_describe_as : "god_among_humans"
 
+							}
+		        request
+		            .post('http://localhost:8000/api/v1/user')
+		            .send(toChange)
+		            .set('cookie',cookie)
+		            .end(function(err,res){
+		                //check if request ok
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                //get updated document	
+		                User.findOne({_id : tester._id},function(err, updatedTester){
+			                tester = updatedTester;
+			                expect(toChange.email).to.equal(tester.email)
+			                expect(toChange.username).to.equal(tester.username)
+			                expect(toChange.name).to.equal(tester.name)
+			                expect(toChange.surname).to.equal(tester.surname)
+			                expect(toChange.age).to.equal(tester.age)
+			                expect(tester.style).to.not.exist
+			                expect(tester.title).to.not.exist
+			                expect(tester.friends_describe_as).to.not.exist
+			                done();
+		                })		               
+		            });
+		    });
+
+			it("Should not let users add an invalid email",function(done){
+		        var toChange = {
+		        				username 	: chance.first(),
+								email 		: "still_dont_know_how_to_email"
+							}
+		        request
+		            .post('http://localhost:8000/api/v1/user')
+		            .send(toChange)
+		            .set('cookie',cookie)
+		            .end(function(err,res){
+		                //check if request ok
+	                	expect(err).to.exist;
+		                expect(res.status).to.equal(400);
+		                expect(res.body.errorMessage).to.equal("This is not a valid email")
+		                done();
+		            });
+		    });
+
+		    it("Should allow users to change their password",function(done){
+		        var toChange = {
+		        				password : chance.string()
+							}
+				//store new password			
+				notYetHashed = toChange.password			
+		        request
+		            .post('http://localhost:8000/api/v1/user')
+		            .send(toChange)
+		            .set('cookie',cookie)
+		            .end(function(err,res){
+		                //check if request ok
+	                	expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                expect(res.body.successMessage).to.equal("Changes Saved to User")
+		                //login with new password	
+		                request
+		                .post('http://localhost:8000/api/v1/login')
+		            	.send({
+		                	password: notYetHashed , username: tester.email
+		            	})	
+		            	.end(function(err,res){
+			                expect(res).to.exist;
+			                expect(res.status).to.equal(200);
+			                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
+			                cookie = res.headers['set-cookie'];
+			                done();
+		           		});
+		           });
+		    });
 		})	
 	})
+
+	//--------------------API/V1/USER/LOGOUT------------------------//
+	
+	describe('------API api/v1/user/logout------',function(){
+		this.timeout(20000)
+
+		//login user after logout
+		after(function (done,err) {
+	        request
+		            .post('http://localhost:8000/api/v1/login')
+		            .send({
+		                password: notYetHashed , username: tester.email
+		            })
+		            .end(function(err,res){
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
+		                cookie = res.headers['set-cookie'];
+		                done();
+		            });
+		});
+
+
+		it('Should only allow authorized users',function(done){
+		        request
+		            .get('http://localhost:8000/api/v1/user/logout')
+		            .set('cookie',fakeCookie)
+		            .end(function(err,res){
+		                expect(err).to.exist;
+		                expect(res.status).to.equal(401);
+		                expect(res.body.message).to.equal("You are not authorized to access this content");
+		                done();		               
+		            });
+		    });
+
+		it('Should log user out of the session',function(done){
+			request
+		            .get('http://localhost:8000/api/v1/user/logout')
+		            .set('cookie',cookie)
+		            .end(function(err,res){
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                expect(res.body.message).to.equal("User successfully logged out");
+		                
+		                //new request to check if user logged out
+		                request
+		            	.get('http://localhost:8000/api/v1/user')
+		            	.set('cookie',cookie)
+		            	.end(function(err,res){
+		    				expect(err).to.exist;
+			                expect(res.status).to.equal(401);
+			                expect(res.body.message).to.equal("You are not authorized to access this content");
+		                	done();
+		            	});		               
+		            });
+		})
+
+	});
 });

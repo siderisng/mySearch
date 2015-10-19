@@ -124,7 +124,7 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		                password: 'wrong_password' , username: 'wrong@email'
 		            })
 		            .end(function(err,res){
-		                expect(res).to.exist;
+		                expect(err).to.exist;
 		                expect(res.status).to.equal(400);
 		                expect(res.body.errorMessage).to.contain("Couldn't Login")
 		                done();
@@ -138,7 +138,7 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		                password: 'wrong_password' , email: tester.username
 		            })
 		            .end(function(err,res){
-		                expect(res).to.exist;
+		                expect(err).to.exist;
 		                expect(res.status).to.equal(400);
 		                expect(res.body.errorMessage).to.contain("Couldn't Login")
 		                done();
@@ -633,7 +633,7 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			        
 					request
 			            .get('http://localhost:8000/api/v1/phone/user')
-			            .set('authorization',"username=madMax&sessionCode=SPAM")
+			            .set('authorization',"username=not_right_user_blabla&sessionCode=SPAM")
 			            .end(function(err,res){
 			                expect(err).to.exist;
 			                expect(res.status).to.equal(404);

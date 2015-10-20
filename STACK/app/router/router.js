@@ -33,6 +33,13 @@ module.exports = function(app) {
 		
 	})
 
+	//send to edit user
+	app.get('/info',function(req,res){
+		
+		res.render('info.jade');	
+		
+	})
+
 	app.get('/edit',function(req,res){
 		
 		res.render('edit.jade');	

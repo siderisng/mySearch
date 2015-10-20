@@ -5,7 +5,8 @@
 
 
 
-div(ng-controller="userCtrl",class="jumbotron", ng-init="__init__()")
+div(class="jumbotron")
+
 	.navbar-wrapper
 		nav.navbar.navbar-inverse.navbar-static-top(role="navigation")
 			.container-fluid
@@ -21,11 +22,11 @@ div(ng-controller="userCtrl",class="jumbotron", ng-init="__init__()")
 						li
 							br
 							br
-							a(ui-sref="userProf") myProfile
+							a(ui-sref="menu.info()") myProfile
 						li
 							br
 							br
-							a(ui-sref="editInfo") Edit myInfo 
+							a(ui-sref="menu.edit()") Edit myInfo 
 						li
 							br
 							br
@@ -39,17 +40,4 @@ div(ng-controller="userCtrl",class="jumbotron", ng-init="__init__()")
 							br
 							button.btn.btn-inverse.navbar-btn(ng-click="logout()")
 								span.glyphicon.glyphicon-log-out Logout
-	div 
-		col-sm-6.col-sm-offset-3
-			// Edit form
-			form
-				.form-group
-					h3 Email : {{user.email}}
-				.form-group
-					h3 Userame : {{user.username}}
-				.form-group
-					h3 Name : {{user.name}}
-				.form-group
-					h3 Surname : {{user.surname}}
-				.form-group
-					h3 Age : {{user.age}}
+	div(ui-view='')

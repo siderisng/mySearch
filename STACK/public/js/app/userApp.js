@@ -25,7 +25,7 @@ mySearch
         $stateProvider 
         
             //public login/signup forms
-            .state('initPage',{
+            .state('site',{
               url : '/',
               templateUrl : 'home',
               controller : 'homeCtrl'
@@ -33,16 +33,22 @@ mySearch
 
             //---------private states---------
             //user profile
-            .state('userProf',{
-              url : '/user/info',
+            .state('menu',{
+              url : '/user',
               templateUrl : 'profile',
+              
+            })
+
+            .state('menu.info',{
+              url : '/info',
+              templateUrl : 'info',
               controller : 'userCtrl'
             })
+
             //edit info
-            .state('editInfo',{
-              url : '/user/info/edit',
-              templateUrl : 'edit',
-              controller : 'userCtrl'
+            .state('edit',{
+              url : '/edit',
+              templateUrl : 'edit'
             })
 
         $locationProvider.html5Mode(true);

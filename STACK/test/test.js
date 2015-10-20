@@ -635,7 +635,7 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		            .end(function(err,res){
 		                expect(res).to.exist;
 		                expect(res.status).to.equal(200);
-		                expect(res.body.authorization).to.exist
+		                expect(res.body.authentication).to.exist
 		                //delete user now
 
 		                User.remove({username : newUser.username}, function (err,noob){

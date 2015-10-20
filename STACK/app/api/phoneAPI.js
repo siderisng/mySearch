@@ -16,7 +16,7 @@ var User = require('../models/userModel');        ///User's Model
 
 module.exports = function(app,tools, privateData) {
 
-	app.route("/api/v1/phone/login")
+	app.route("/api/v1/phone/signup")
 		.post(function(req,res){
 			var userData = req.body
 			if (!userData){
@@ -26,8 +26,8 @@ module.exports = function(app,tools, privateData) {
 			}
 
 			//check if request is ok
-            if (!userData.username || !userData.email){
-            	res.status(400).send({errorMessage: "Username and email fields are required"})
+            if (!userData.username || !userData.email || !userData.password){
+            	res.status(400).send({errorMessage: "Username, password and email fields are required"})
 		    	return 
 		    }
 		    if (!tools.validEmail(userData.email)){
@@ -51,7 +51,7 @@ module.exports = function(app,tools, privateData) {
 
                         //Init user's info
                         newUser.email           = userData.email;
-                        newUser.password        = newUser.generateHash(userData);
+                        newUser.password        = newUser.generateHash(userData.password);
                         newUser.username        = userData.username;
                         newUser.name            = userData.name;
                         newUser.surname         = userData.surname;
@@ -67,7 +67,7 @@ module.exports = function(app,tools, privateData) {
                                 res.status(500).send({message : err.message})
                                 return;
                             }
-                            res.send({authentication : user.sessionCode})
+                            res.send({authentication : newUser.sessionCode})
                         });
                   
                     }

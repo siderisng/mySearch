@@ -16,6 +16,68 @@ var User = require('../models/userModel');        ///User's Model
 
 module.exports = function(app,tools, privateData) {
 
+	app.route("/api/v1/phone/login")
+		.post(function(req,res){
+			var userData = req.body
+			if (!userData){
+				res.status(400).send({errorMessage: "You sent an empty request"})
+		    	return
+
+			}
+
+			//check if request is ok
+            if (!userData.username || !userData.email){
+            	res.status(400).send({errorMessage: "Username and email fields are required"})
+		    	return 
+		    }
+		    if (!tools.validEmail(userData.email)){
+                res.status(400).send({errorMessage: "Not valid email"})
+		    	return
+            }
+            //find if anybody else is using this email or username
+            User
+                .findOne({ $or: [ { 'username': userData.username }, { 'email': userData.email } ] },function(err,user){
+                    // if there are any errors, return the error
+                    if (err)
+                        return done(err);
+
+                    if (user) {
+						res.status(400).send({errorMessage: "User already exists"})
+					   	return                    
+		    		} else {
+
+                        //else create user
+                        var newUser     = new User();
+
+                        //Init user's info
+                        newUser.email           = userData.email;
+                        newUser.password        = newUser.generateHash(userData);
+                        newUser.username        = userData.username;
+                        newUser.name            = userData.name;
+                        newUser.surname         = userData.surname;
+                        newUser.age             = userData.age;
+                        newUser.onPhoneSession  = true;
+                        //create unique code
+	            		newUser.sessionCode = cc.generate();
+	            
+
+                        // save user
+                        newUser.save(function(err) {
+                            if (err){ 
+                                res.status(500).send({message : err.message})
+                                return;
+                            }
+                            res.send({authentication : user.sessionCode})
+                        });
+                  
+                    }
+
+            });    
+
+
+
+		})
+
 
 	//We cannot use cookies with phone so we'll set up a custom session
 	app.route("/api/v1/phone/login")

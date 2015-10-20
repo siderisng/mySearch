@@ -614,6 +614,86 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			});
 		});
 
+		
+		describe('------API api/v1/phone/signup------',function(){
+			this.timeout(20000)
+
+			it('Should succesfully sign-up new users',function(done){
+		        var newUser ={
+					email 		: 	chance.email({domain : 'foo.com'}),
+					password 	: 	chance.string(),
+					username	: 	chance.first() 
+				}
+
+		        request
+		            .post('http://localhost:8000/api/v1/phone/signup')
+		            .send({
+		                password: newUser.password , 
+		                email: newUser.email,
+		                username : newUser.username
+		            })
+		            .end(function(err,res){
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                expect(res.body.authorization).to.exist
+		                //delete user now
+
+		                User.remove({username : newUser.username}, function (err,noob){
+		                	expect(err).to.not.exist;
+		                	done();
+		                })
+		            });
+		    });
+
+
+			it('Block Users with the same email',function(done){
+		    	request
+		            .post('http://localhost:8000/api/v1/phone/signup')
+		            .send({
+		                password: tester.password , 
+		                email: tester.email,
+		                username : chance.first()
+		            })
+		            .end(function(err,res){
+		                expect(err).to.exist;
+		                expect(res.status).to.equal(400);
+		                done();
+		                })
+		    });
+
+
+			it('Block Users with the same username',function(done){
+		    	request
+		            .post('http://localhost:8000/api/v1/phone/signup')
+		            .send({
+		                password: tester.password , 
+		                email: chance.email({domain : "doubleuser.com"}),
+		                username : tester.username
+		            })
+		            .end(function(err,res){
+		                expect(err).to.exist;
+		                expect(res.status).to.equal(400);
+		                done();
+		            })
+		    });
+
+			it('Block Users with invalid email',function(done){
+		    	request
+		            .post('http://localhost:8000/api/v1/signup')
+		            .send({
+		                password: tester.password , 
+		                email: "I_don_t_know_how_to_email",
+		                username : chance.first()
+		            })
+		            .end(function(err,res){
+		                expect(err).to.exist;
+		                expect(res.status).to.equal(400);
+		                done();
+		                })
+		    });
+
+		});
+		
 
 		describe('------------CUSTOM SESSIONS-----------',function(){
 

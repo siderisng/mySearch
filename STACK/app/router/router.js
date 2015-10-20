@@ -19,13 +19,6 @@ module.exports = function(app) {
 	})
 
 
-	//send to profile
-	app.get('/mainMenu',function(req,res){
-		
-		res.render('mainMenu.jade');	
-		
-	})
-
 	//send to edit user
 	app.get('/profile',function(req,res){
 		
@@ -45,16 +38,6 @@ module.exports = function(app) {
 		res.render('edit.jade');	
 		
 	})
-
-	//send to users' maps and stats
-	/* TODO 
-	app.get('menu/maps',function(req,res){
-
-		res.render('menuMaps.jade');
-
-	})
-	*/
-
 
 	//redirect unknown requests to home
 	app.get('*',function(req,res){

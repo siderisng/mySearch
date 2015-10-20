@@ -306,7 +306,22 @@ module.exports = function(app,passport,tools, privateData) {
 
 		})
 	
-
+	/**
+ 		*@api {get} /api/v1/user/logout Logs user out of the session
+ 		*@apiName UserLogout
+ 		*@apiGroup User
+ 		*
+		*
+		*@apiSuccess {json} message Message with info
+		*@apiSuccessExample {json} Success-Response:
+        *	  {	message : SUCCESS_STRING}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+        *@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/	
 	app.route('/api/v1/user/logout')
 		
 		.get(tools.authenticateUser,function(req,res){

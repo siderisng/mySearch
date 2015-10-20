@@ -30,6 +30,8 @@ div(ng-controller="homeCtrl" id="content")
 							button.btn.btn-default.btn-lg(ng-click='login()' type='submit') Login
 							br
 							a(onclick="javascript:showDiv();" id="open" href="#") Not a member yet? RLY?
+							br
+							a(href='documentation' target='_top') U Developer?
 			div(id="signup")			
 				div(id="signupModal")
 						div(id = "signupScreen")
@@ -80,11 +82,4 @@ div(ng-controller="homeCtrl" id="content")
 											button.btn.btn-default.btn-lg(ng-if="!inputForm.email.$error.required && !inputForm.username.$error.required && !inputForm.password.$error.required && !inputForm.passwordRep.$error.required", ng-click='signup()') Signup
 								div(ng-show="!registerBool")
 									button.btn.alert.btn-sm(ng-click='register()', name="register" type='submit') Don't have an account?
-
-
 								a(onclick="javascript:hideDiv();" href="#" id="close") CLOSE X
-					
-					
-		
-	
-								

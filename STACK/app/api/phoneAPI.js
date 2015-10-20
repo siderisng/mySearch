@@ -17,7 +17,35 @@ var User = require('../models/userModel');        ///User's Model
 module.exports = function(app,tools, privateData) {
 
 	app.route("/api/v1/phone/signup")
-		.post(function(req,res){
+		
+	/**
+ 		*@api {post} /api/v1/phone/signup Signup user in the application
+ 		*@apiName phoneSignup
+ 		*@apiGroup Phone
+ 		*
+		*
+		*@apiParam {json} Users' mail, username and password are mandatory. Name, surname, age are optional
+ 		*@apiParamExample {json} Request-Example:
+        *    {
+        *		email		: USER_EMAIL,
+		*		password	: USER_PASSWORD,
+		*		username	: USER_USERNAME,
+		*		name		: USER_NAME,
+		*		surname		: USER_SURNAME,
+		*		age			: USER_AGE
+        *	} 
+		*
+		*
+		*@apiSuccess {String} successMessage Success message
+		*@apiSuccessExample {json} Success-Response:
+        *	  {authentication : USER_SESSION_CODE}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+		*@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/.post(function(req,res){
 			var userData = req.body
 			if (!userData){
 				res.status(400).send({errorMessage: "You sent an empty request"})
@@ -38,8 +66,10 @@ module.exports = function(app,tools, privateData) {
             User
                 .findOne({ $or: [ { 'username': userData.username }, { 'email': userData.email } ] },function(err,user){
                     // if there are any errors, return the error
-                    if (err)
-                        return done(err);
+                    if (err){
+                        res.status(500).send({errorMessage: "We're sorry something went wrong"})
+						return
+					}
 
                     if (user) {
 						res.status(400).send({errorMessage: "User already exists"})
@@ -111,6 +141,7 @@ module.exports = function(app,tools, privateData) {
 
  			var username = req.body.username
  			var password = req.body.password
+ 			console.log("User "+username+" tries to log in")
 
  			//user can login with either his namespace or email so check for both
         	User.findOne({$or : [{ 'email'  :  username },{'username' : username}]}, function(err, user) {
@@ -168,7 +199,7 @@ module.exports = function(app,tools, privateData) {
  		*
  		*@apiHeaderExample {json} Header-Example: 
 		*	{
-		*		"Authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
 		*	}
 		*
 		*
@@ -234,7 +265,7 @@ module.exports = function(app,tools, privateData) {
  		*
  		*@apiHeaderExample {json} Header-Example: 
 		*	{
-		*		"Authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
 		*	}
 		*
 		*@apiSuccess {json} info Json object which contains user data
@@ -284,13 +315,13 @@ module.exports = function(app,tools, privateData) {
 
 
 		/**
- 		*@api {post} /api/v1/Phone/user Sets phone user information
+ 		*@api {post} /api/v1/phone/user Sets phone user information
  		*@apiName PhoneUserSetInfo
  		*@apiGroup Phone
  		*
  		*@apiHeaderExample {json} Header-Example: 
 		*	{
-		*		"Authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
 		*	}
 		*
 		*@apiParam {json} Attributes to change for user
@@ -366,7 +397,25 @@ module.exports = function(app,tools, privateData) {
 			});
 		});
 
-
+	/**
+ 		*@api {get} /api/v1/phone/logout Logs user out of the session
+ 		*@apiName PhoneLogout
+ 		*@apiGroup Phone
+ 		*
+		*@apiHeaderExample {json} Header-Example: 
+		*	{
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*	}
+		*@apiSuccess {json} message Message with info
+		*@apiSuccessExample {json} Success-Response:
+        *	  {	message : SUCCESS_STRING}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+        *@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/	
 	app.route("/api/v1/phone/user/logout")
 
 		.get(tools.authenticateUserPhone, function(req,res){

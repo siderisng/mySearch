@@ -15,12 +15,33 @@ mySearch
 .config(['$stateProvider', '$urlRouterProvider','$locationProvider', 
   function ($stateProvider,   $urlRouterProvider, $locationProvider) {
         
-        //Redirect when url is unknown
-        $urlRouterProvider.otherwise(function($injector, $location){
-            //to put code here for later
-            return '/';
-          });
+        //check if user is logged in         
+        function isAuth(){
+          return (window.localStorage.getItem('auth'))
+        
+        }
 
+        //Send to user or sponsor profile page when uknown url
+        $urlRouterProvider.otherwise(function($injector, $location){
+            //if user requests to access documentation let him 
+            //else check if he's logged in 
+            if (!$location.path()=='/documentation')
+              return '/documentation'
+            if (isAuth()) //else to profile
+              return '/user';
+            else 
+              return '/';
+            
+        });
+
+        //don't let in unauthorized users
+        $urlRouterProvider.rule(function($injector, $location){
+          //if evil guy tries to enter /user/* redirect him
+          if ($location.path().substring(0, 5) === '/user')
+            if (!isAuth())
+              return'/';
+        }); 
+         
         //Configuration and routing for states
         $stateProvider 
         
@@ -31,22 +52,23 @@ mySearch
               controller : 'homeCtrl'
             })
 
+
             //---------private states---------
             //user profile
             .state('menu',{
               url : '/user',
               templateUrl : 'profile',
-              
+              controller : 'userCtrl'
             })
 
             .state('menu.info',{
               url : '/info',
-              templateUrl : 'info',
-              controller : 'userCtrl'
+              templateUrl : 'info'
+           
             })
 
             //edit info
-            .state('edit',{
+            .state('menu.edit',{
               url : '/edit',
               templateUrl : 'edit'
             })

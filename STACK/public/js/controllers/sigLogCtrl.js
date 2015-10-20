@@ -2,7 +2,8 @@
 	controller to handle user signup and login
 */
 angular.module('mySearch')
-	.controller('homeCtrl',['$scope', "Notification",'loginSrvc','signupSrvc', '$state', function($scope, Notification, loginSrvc, signupSrvc, $state){
+	.controller('homeCtrl',['$scope', "Notification",'loginSrvc','signupSrvc', '$state','$window', 
+		function($scope, Notification, loginSrvc, signupSrvc, $state,$window){
 		
 		$scope.registerBool = false;
 
@@ -15,7 +16,9 @@ angular.module('mySearch')
 			loginSrvc.login($scope.usernameLog,hashedPwd)
 				.then(
 			        function(resp){
-			           $state.go("menu")
+			        	//set to true when user is logged in
+			        	$window.localStorage.setItem('auth',true);
+			           	$state.go("menu")
 			        },
 			        function(err){
 			           Notification.error(err.data.errorMessage);
@@ -34,6 +37,8 @@ angular.module('mySearch')
 				signupSrvc.signup($scope.username, $scope.email, hashedPwd, $scope.name, $scope.surname, $scope.age)
 					.then(
 				        function(resp){
+				 			//set to true when user is logged in
+				 			$window.localStorage.setItem('auth',true);
 				        	$state.go("menu")
 				        },
 				        function(err){

@@ -8,6 +8,10 @@ body {
 	padding:0px 20px;
 }
 
+.palette1{color:#D13D38!important;}
+.palette2{color:#008BBA!important;}
+.palette3{color:#85C4B9!important;}
+
 .ng-scope{
 	padding-top:0px!important;
 }
@@ -226,7 +230,7 @@ h1{
 
 #signupScreen {
 		background:transparent;
-
+		text-shadow: none;
 	/*
 	background-image : url("/img/suBack.jpg");
     background-repeat: no-repeat;	

@@ -8,7 +8,7 @@ div(ng-controller="homeCtrl" id="content")
 			nav.navbar
 				.container-fluid
 					.navbar-header
-						h1 mySearch
+						h1(class='palette1') mySearch
 						button.navbar-toggle(type="button" data-toggle="collapse" data-target=".navbar-collapse")
 							span.sr-only Toggle navigation
 							span.icon-bar
@@ -32,7 +32,7 @@ div(ng-controller="homeCtrl" id="content")
 							br
 							a(onclick="javascript:showDiv();" id="open" href="#") Not a member yet? RLY?
 							br
-							a(href='documentation' target='_top') U Developer?
+							a(href='documentation' class='palette2' target='_top') U Developer?
 			div(id="signup")			
 				div(id="signupModal")
 						div(id = "signupScreen")

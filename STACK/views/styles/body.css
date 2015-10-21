@@ -116,6 +116,7 @@ body {
     height: 100%;
 }
 
+
 @media (min-aspect-ratio: 16/9) {
   .fullscreen-bg__video {
     width: 100%;
@@ -216,7 +217,7 @@ h1{
 }
 
 #nav-left img{
-	width:300px;
+	width:400px;
 }
 
 
@@ -236,3 +237,9 @@ h1{
     background-repeat: no-repeat;	
 	*/
 } 
+
+@media (min-width: 1400px) {
+	ul.nav.navbar-nav.navbar-right {
+		margin-top:0!important;
+	}
+}

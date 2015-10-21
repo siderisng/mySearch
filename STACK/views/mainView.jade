@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////
-//////////AUTHORS :   chocof (https://github.com/chocof), //////
+//////////AUTHORS :   siderisng, chocof (https://github.com/chocof) //////
 //////////File    :   views/mainView.jade           ////////////
 ////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,8 @@ head
 
     //ui router to handle routing
     script(src='/angular-ui-router/release/angular-ui-router.min.js')
-    
+    //ui-router provider    
+    script(src='/angular-ui-router.stateHelper/statehelper.min.js')
 
     //for hashing passwords
     script(src="/cryptojslib/rollups/md5.js")
@@ -39,6 +40,8 @@ head
 
     //for notifications
     script(src="/angular-ui-notification/dist/angular-ui-notification.min.js")
+
+
 
     //our scripts    
     script(src="/js/jquery_customs/signupModal.js")

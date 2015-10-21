@@ -10,7 +10,11 @@ angular.module('mySearch')
     	editInfo : function (objectToEdit){
 
           return $http.post("/api/v1/user", objectToEdit); 
-    	}
+    	},
+
+		logout : function(){
+			return $http.get("/api/v1/user/logout");
+		}    	
 	}
     
 }]);

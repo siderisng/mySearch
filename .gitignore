@@ -1,0 +1,6 @@
+STACK/node_modules
+STACK/bower_components
+STACK/.git
+STACK/.gitignore
+STACK/Procfile
+STACK/keys

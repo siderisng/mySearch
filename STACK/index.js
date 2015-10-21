@@ -45,18 +45,17 @@ var db_options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: TI
         replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : TIMEOUT_MS } } 
     };
 
-
-
-
-
 //configuration settings for passport
 var configSession = require('./config/session.js')
-
-var passport = require('passport');
-require('./config/passportConfig')(passport); //We need to create passport file for configuration 
-
 var flash    = require('connect-flash');
+var passport = require('passport');
+
 var session  = require('express-session');
+
+
+//load my tools
+var tools = require('./config/tools.js')
+
 
 //init passport stuff
 app.use(session({
@@ -66,10 +65,13 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
-app.use(passport.initialize());
-app.use(passport.session()); 
 app.use(flash()); 
 
+
+
+require('./config/passportConfig')(passport, tools); //We need to create passport file for configuration 
+app.use(passport.initialize());
+app.use(passport.session()); 
 
 
 
@@ -93,8 +95,6 @@ var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:')); //check errors
 
 
-//load my tools
-var tools = require('./config/tools.js')
 
 
 //--------------------HTTP CONNECTION--------------------//

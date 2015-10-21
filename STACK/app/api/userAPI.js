@@ -99,21 +99,19 @@ module.exports = function(app,passport,tools, privateData) {
  		*     {errorMessage: ERROR_MESSAGE }
  		*/
 		.post(function(req, res, next) { //register user with passport
-			passport.authenticate('login', function(err, user, info) {
-				
+			passport.authenticate('login',function(err, user, info) {
+				console.log(info)				
 				//find errors(if they exist) and send message
 				if (err){
 					console.log("Login Error : ",e.message)
-					res.status(500).send({errorMessage : err.message})
+					res.status(500).send({errorMessage : "Couldn't Login"}); 
 					return;
 				};
 				if(!user){
-					errMess = req.flash('loginMessage')
-					res.status(400).send({errorMessage : errMess[0]}); 
+					res.status(400).send({errorMessage : "Couldn't Login"}); 
 					return;
 				}
 				
-				//log user in session
 				req.logIn(user, function(err) {
 					
 					console.log('[+]User with username '+user.username+' successfully logged in!!!')
@@ -161,8 +159,6 @@ module.exports = function(app,passport,tools, privateData) {
  		*     {message: ERROR_MESSAGE }
  		*/
 		.get(tools.authenticateUser,function(req,res){
-
-
 
 			//first find user by id
 			User.findById(req.user,function(err, user){
@@ -235,23 +231,30 @@ module.exports = function(app,passport,tools, privateData) {
 
 				for (attr in toChangeAttrs){
 					//if user wants to change password
-					if (attr === 'password'){
-						user.password = User.generateHash(toChangeAttrs[attr]);
+					if (attr === 'password' && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
+						user.password = user.generateHash(toChangeAttrs[attr]);
 						continue;
 					}
 					//else set normally
-					if (arrayOfAllowedAttrs.indexOf(attr) >= 0 && toChangeAttrs[attr] && toChangeAttrs[attr] != "")
-						user[attr] = toChangeAttrs[attr];
+					if (arrayOfAllowedAttrs.indexOf(attr) >= 0 && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
+						if (attr == 'email' && !tools.validEmail(toChangeAttrs[attr])){
+							res.status(400).send({errorMessage : "This is not a valid email"})
+							return
+						}
 
+						user[attr] = toChangeAttrs[attr];
+					}
 					//check for malicius use
-					else if ((attr === 'id')||(attr === '_id'))
+					else if (attr === 'id' || attr === '_id') {
 						console.log("User with email " + user.email + " and username " 
 							+ user.username + " is trying to change his id.");
-
+						res.status(400).send({errorMessage : "You can't change your id"})
+						return
+					}
 				}
 				
 				//save user
-				user.save(function(req, res){
+				user.save(function(req, user){
 					if (err){
 						console.log("Getting User Info  Error : ",e.message)
 		      	    	res.status(500).send({errorMessage : err.message})
@@ -264,12 +267,12 @@ module.exports = function(app,passport,tools, privateData) {
 		});
 
 
-	app.route('api/v1/user/history/location')
+	app.route('/api/v1/user/history/location')
 
 
 		.get(tools.authenticateUser, function(req,res){
 
-			User.findById(req.user, function(err,res){
+			User.findById(req.user, function(err,user){
 				if (err){
 					console.log("Getting User History Error : ",e.message)
 	      	    	res.status(500).send({errorMessage : err.message})
@@ -285,24 +288,47 @@ module.exports = function(app,passport,tools, privateData) {
 		})
 	
 
-	app.route('api/v1/user/history/searches')
+	app.route('/api/v1/user/history/searches')
 
 
-	.get(tools.authenticateUser, function(req,res){
+		.get(tools.authenticateUser, function(req,res){
 
-		User.findById(req.user, function(err,res){
-			if (err){
-				console.log("Getting User History Error : ",e.message)
-      	    	res.status(500).send({errorMessage : err.message})
-				return;
+			User.findById(req.user, function(err,res){
+				if (err){
+					console.log("Getting User History Error : ",e.message)
+	      	    	res.status(500).send({errorMessage : err.message})
+					return;
 
-			}
+				}
 
-			res.send({history : user.searchesHistory })
-
+				res.send({history : user.searchesHistory })
+			})
 
 		})
-
-	})
 	
+	/**
+ 		*@api {get} /api/v1/user/logout Logs user out of the session
+ 		*@apiName UserLogout
+ 		*@apiGroup User
+ 		*
+		*
+		*@apiSuccess {json} message Message with info
+		*@apiSuccessExample {json} Success-Response:
+        *	  {	message : SUCCESS_STRING}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+        *@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/	
+	app.route('/api/v1/user/logout')
+		
+		.get(tools.authenticateUser,function(req,res){
+				req.logout();
+				res.send({message : "User successfully logged out"})
+				return
+		})
+
+
 }

@@ -16,6 +16,98 @@ var User = require('../models/userModel');        ///User's Model
 
 module.exports = function(app,tools, privateData) {
 
+	app.route("/api/v1/phone/signup")
+		
+	/**
+ 		*@api {post} /api/v1/phone/signup Signup user in the application
+ 		*@apiName phoneSignup
+ 		*@apiGroup Phone
+ 		*
+		*
+		*@apiParam {json} Users' mail, username and password are mandatory. Name, surname, age are optional
+ 		*@apiParamExample {json} Request-Example:
+        *    {
+        *		email		: USER_EMAIL,
+		*		password	: USER_PASSWORD,
+		*		username	: USER_USERNAME,
+		*		name		: USER_NAME,
+		*		surname		: USER_SURNAME,
+		*		age			: USER_AGE
+        *	} 
+		*
+		*
+		*@apiSuccess {String} successMessage Success message
+		*@apiSuccessExample {json} Success-Response:
+        *	  {authentication : USER_SESSION_CODE}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+		*@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/.post(function(req,res){
+			var userData = req.body
+			if (!userData){
+				res.status(400).send({errorMessage: "You sent an empty request"})
+		    	return
+
+			}
+
+			//check if request is ok
+            if (!userData.username || !userData.email || !userData.password){
+            	res.status(400).send({errorMessage: "Username, password and email fields are required"})
+		    	return 
+		    }
+		    if (!tools.validEmail(userData.email)){
+                res.status(400).send({errorMessage: "Not valid email"})
+		    	return
+            }
+            //find if anybody else is using this email or username
+            User
+                .findOne({ $or: [ { 'username': userData.username }, { 'email': userData.email } ] },function(err,user){
+                    // if there are any errors, return the error
+                    if (err){
+                        res.status(500).send({errorMessage: "We're sorry something went wrong"})
+						return
+					}
+
+                    if (user) {
+						res.status(400).send({errorMessage: "User already exists"})
+					   	return                    
+		    		} else {
+
+                        //else create user
+                        var newUser     = new User();
+
+                        //Init user's info
+                        newUser.email           = userData.email;
+                        newUser.password        = newUser.generateHash(userData.password);
+                        newUser.username        = userData.username;
+                        newUser.name            = userData.name;
+                        newUser.surname         = userData.surname;
+                        newUser.age             = userData.age;
+                        newUser.onPhoneSession  = true;
+                        //create unique code
+	            		newUser.sessionCode = cc.generate();
+	            
+
+                        // save user
+                        newUser.save(function(err) {
+                            if (err){ 
+                                res.status(500).send({message : err.message})
+                                return;
+                            }
+                            res.send({authentication : newUser.sessionCode})
+                        });
+                  
+                    }
+
+            });    
+
+
+
+		})
+
 
 	//We cannot use cookies with phone so we'll set up a custom session
 	app.route("/api/v1/phone/login")
@@ -49,8 +141,8 @@ module.exports = function(app,tools, privateData) {
 
  			var username = req.body.username
  			var password = req.body.password
+ 			console.log("User "+username+" tries to log in")
 
- 			console.log(req.body)
  			//user can login with either his namespace or email so check for both
         	User.findOne({$or : [{ 'email'  :  username },{'username' : username}]}, function(err, user) {
 	            if (err){
@@ -74,6 +166,7 @@ module.exports = function(app,tools, privateData) {
 	                    req.connection.socket.remoteAddress;
 	                console.log("User with IP "+possibleThreatIp+" tried to access account of user " + user.username)
 	            	res.status(401).send({errorMessage : "Passwords don't match please try again"})
+	            	return;
 	            }	
 
 	            //if ok state that user started a new session
@@ -106,7 +199,7 @@ module.exports = function(app,tools, privateData) {
  		*
  		*@apiHeaderExample {json} Header-Example: 
 		*	{
-		*		"Authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
 		*	}
 		*
 		*
@@ -172,7 +265,7 @@ module.exports = function(app,tools, privateData) {
  		*
  		*@apiHeaderExample {json} Header-Example: 
 		*	{
-		*		"Authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
 		*	}
 		*
 		*@apiSuccess {json} info Json object which contains user data
@@ -222,13 +315,13 @@ module.exports = function(app,tools, privateData) {
 
 
 		/**
- 		*@api {post} /api/v1/Phone/user Sets phone user information
+ 		*@api {post} /api/v1/phone/user Sets phone user information
  		*@apiName PhoneUserSetInfo
  		*@apiGroup Phone
  		*
  		*@apiHeaderExample {json} Header-Example: 
 		*	{
-		*		"Authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
 		*	}
 		*
 		*@apiParam {json} Attributes to change for user
@@ -249,7 +342,7 @@ module.exports = function(app,tools, privateData) {
 		*@apiError 401 Authorization Failed
         *@apiError 500 Internal Server Error
         *@apiErrorExample {json} Error-Response:
- 		*     {message: ERROR_MESSAGE }
+ 		*     {errorMessage: ERROR_MESSAGE }
  		*/
 		.post(tools.authenticateUserPhone, function(req,res,next){
 			var sessionData = qs.parse(req.headers.authorization)
@@ -268,17 +361,27 @@ module.exports = function(app,tools, privateData) {
 
 				for ( attr in toChangeAttrs ) {
 					//if user wants to change password
-					if ( attr === 'password' ) {
-						user.password = user.generateHash( toChangeAttrs[attr] );
+					if (attr === 'password' && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
+						user.password = user.generateHash(toChangeAttrs[attr]);
 						continue;
 					}
 
 					//else set normally
-					if ( arrayOfAllowedAttrs.indexOf( attr ) >= 0 )
-						user[attr] = toChangeAttrs[ attr ];
+					if (arrayOfAllowedAttrs.indexOf(attr) >= 0 && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
+						if (attr == 'email' && !tools.validEmail(toChangeAttrs[attr])){
+							res.status(400).send({errorMessage : "This is not a valid email"})
+							return
+						}
+
+						user[attr] = toChangeAttrs[attr];
+					}
 					//check for malicius use
-					else if ( ( attr === 'id') || ( attr === '_id' ) )
-						console.log( "User with email " + user.email + " and username " + user.username + " is trying to change his id." );
+					else if (attr === 'id' || attr === '_id') {
+						console.log("User with email " + user.email + " and username " 
+							+ user.username + " is trying to change his id.");
+						res.status(400).send({errorMessage : "You can't change your id"})
+						return
+					}
 				}
 
 				//save user
@@ -293,5 +396,55 @@ module.exports = function(app,tools, privateData) {
 				});
 			});
 		});
+
+	/**
+ 		*@api {get} /api/v1/phone/logout Logs user out of the session
+ 		*@apiName PhoneLogout
+ 		*@apiGroup Phone
+ 		*
+		*@apiHeaderExample {json} Header-Example: 
+		*	{
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*	}
+		*@apiSuccess {json} message Message with info
+		*@apiSuccessExample {json} Success-Response:
+        *	  {	message : SUCCESS_STRING}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+        *@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/	
+	app.route("/api/v1/phone/user/logout")
+
+		.get(tools.authenticateUserPhone, function(req,res){
+			var sessionData = qs.parse(req.headers.authorization)
+
+			//find user by username
+			User.findOne( {"username" : sessionData.username}, function( err, user ) {
+				if ( err ) {
+						console.log( "Error during logout: ", err.message)
+						res.status(500).send( {errorMessage : err.message} )
+						return;
+					}
+				user.sessionCode = "";
+				user.onPhoneSession  = false;	
+					
+				user.save(function(err){
+					if ( err ) {
+						console.log( "Error during logout: ", err.message)
+						res.status(500).send( {errorMessage : err.message} )
+						return;
+					}
+					console.log("User "+user.username+"logged out");
+					res.send({successMessage : "You Logged Out Of Session"})	
+				})	
+
+
+			})
+
+		})
+
 
 }

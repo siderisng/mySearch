@@ -4228,6 +4228,11 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     width:100%;
   }
 }
+
+.navbar-collapse.collapse {
+    width: 700px;
+}
+
 .navbar-collapse {
   padding-right: auto;
   padding-left: auto;
@@ -4279,7 +4284,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .container-fluid > .navbar-collapse {
   margin-right: auto;
   margin-left: auto;
-  width:700px!important;
 }
 @media (min-width: 768px) {
   .container > .navbar-header,

@@ -6,6 +6,7 @@ body {
 	font-family: 'Open Sans Condensed', sans-serif, Arial;
 	text-shadow:1px 1px #000;
 	padding:0px 20px;
+	background:#85C4B9;
 }
 
 .palette1{color:#D13D38!important;}
@@ -72,6 +73,9 @@ body {
 	color:#fff!important;
 	font-size:20px;
 	display:block;
+	text-shadow:none;
+
+
 	
 }
 

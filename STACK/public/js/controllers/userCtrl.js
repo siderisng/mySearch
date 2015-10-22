@@ -30,16 +30,6 @@ angular.module('mySearch')
 
 	}
 
-	//used to copy newly edited user info to display correctly
-	function copyObject(objA, objB){
-
-        for (attr in objA){
-            if (objA[attr])
-                objB[attr] = objA[attr]
-        }
-
-    }
-
     //Inits user info
     $scope.editInfo = function(){
         var changes = $scope.edit;    
@@ -69,3 +59,14 @@ angular.module('mySearch')
 
 
 }]);
+
+
+//used to copy newly edited user info to display correctly
+function copyObject(objA, objB){
+
+    for (attr in objA){
+        if (objA[attr])
+            objB[attr] = objA[attr]
+    }
+
+}

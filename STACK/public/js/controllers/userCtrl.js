@@ -12,6 +12,9 @@ angular.module('mySearch')
 	}
 
 
+
+
+
 	//Inits user info
 	$scope.__init__ = function(){
 		$scope.user= {}
@@ -27,18 +30,30 @@ angular.module('mySearch')
 
 	}
 
-	//Inits user info
-	$scope.editInfo = function(){
-		userInfo.editInfo($scope.edit)
-			.success(function(resp){
-	         	//Print message to user
-	         	
-			})
-			.error(function(err){
-		        //Print message to user
-	         })
+	//used to copy newly edited user info to display correctly
+	function copyObject(objA, objB){
 
-	}
+        for (attr in objA){
+            if (objA[attr])
+                objB[attr] = objA[attr]
+        }
+
+    }
+
+    //Inits user info
+    $scope.editInfo = function(){
+        var changes = $scope.edit;    
+
+        userInfo.editInfo(changes)
+            .success(function(resp){
+                 copyObject(changes, $scope.user);
+                $state.go('menu.info')
+            })
+            .error(function(err){
+                //Print message to user
+             })
+
+    }
 
 	//Inits user info
 	$scope.logout = function(){

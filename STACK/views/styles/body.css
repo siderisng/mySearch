@@ -246,4 +246,13 @@ h1{
 	ul.nav.navbar-nav.navbar-right {
 		margin-top:0!important;
 	}
-}/*
+}*/
+
+#editInfo{
+	margin:20px 40px;
+	width:300px;
+}
+
+#editInfo h3{
+	text-shadow:none;
+}

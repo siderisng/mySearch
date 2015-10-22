@@ -1,15 +1,8 @@
 angular.module('mySearch')
-.controller('userCtrl',['$scope','userInfo','$state', '$window',
-	function($scope, userInfo, $state,$window){
+.controller('userCtrl',['$scope','userInfo','$state', '$window',"Notification",
+	function($scope, userInfo, $state,$window,Notification){
 	//init variables
-	$scope.edit ={
-		username 	: "",
-		surname 	: "",
-		email 		: "",
-		password	: "",
-		name 	 	: "",
-		age			: ""	
-	}
+	$scope.edit ={}
 
 
 
@@ -32,6 +25,10 @@ angular.module('mySearch')
 
     //Inits user info
     $scope.editInfo = function(){
+        if ($scope.edit.password != $scope.edit.passwordRep){
+        	Notification.error("Passwords don't match")
+        	return;
+        }
         var changes = $scope.edit;    
 
         userInfo.editInfo(changes)
@@ -40,7 +37,7 @@ angular.module('mySearch')
                 $state.go('menu.info')
             })
             .error(function(err){
-                //Print message to user
+                Notification.error(err.errorMessage)
              })
 
     }

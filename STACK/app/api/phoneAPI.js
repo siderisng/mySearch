@@ -355,6 +355,7 @@ module.exports = function(app,tools, privateData) {
 					return;
 				}
 
+				var makeCheck = false;
 				//set new attributes
 				var toChangeAttrs = req.body;
 				var arrayOfAllowedAttrs = [ 'username', 'email', 'name', 'surname', 'age' ];
@@ -364,6 +365,11 @@ module.exports = function(app,tools, privateData) {
 					if (attr === 'password' && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
 						user.password = user.generateHash(toChangeAttrs[attr]);
 						continue;
+					}
+
+					//check if we need to make changes	
+					if (attr === 'email' || attr === 'username'){
+						makeCheck = true;
 					}
 
 					//else set normally
@@ -384,19 +390,42 @@ module.exports = function(app,tools, privateData) {
 					}
 				}
 
-				//save user
-				user.save( function( err, user ) {
-					if ( err ) {
-						console.log( "Getting User Info Error : ", err.message)
-						res.status(500).send( {errorMessage : err.message} )
+				if (!makeCheck){
+					//save user
+					user.save(function(req, user){
+						if (err){
+							console.log("Getting User Info  Error : ",e.message)
+			      	    	res.status(500).send({errorMessage : err.message})
+							return;
+						}
+
+						res.send({successMessage : "Changes submited"});
+					});
+				}
+				else
+					User.findOne({ $or: [ { 'username': toChangeAttrs.username }, { 'email': toChangeAttrs.email } ] },function(err,otherUser){
+                    // if there are any errors, return the error
+                    if (err){
+                        res.status(500).send({errorMessage : err.message})
 						return;
 					}
+                    if (otherUser) {
+                    	res.status(400).send({errorMessage : "We are sorry username or email you entered are taken"});
+                    	return;
+					}
+					user.save(function(req, user){
+						if (err){
+							console.log("Getting User Info  Error : ",e.message)
+			      	    	res.status(500).send({errorMessage : err.message})
+							return;
+						}
 
-					res.send( {successMessage : "Changes submited"} )
-				});
+						res.send({successMessage : "Changes submited"});
+					});
 			});
 		});
-
+	});
+	
 	/**
  		*@api {get} /api/v1/phone/logout Logs user out of the session
  		*@apiName PhoneLogout

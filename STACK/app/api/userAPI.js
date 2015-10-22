@@ -224,17 +224,24 @@ module.exports = function(app,passport,tools, privateData) {
 					return;
 				}
 
+				var makeCheck = false;
+
 				//set new attributes
 				var toChangeAttrs = req.body; 
 					
 				var arrayOfAllowedAttrs = ['username','email','name','surname','age'];	
-
 				for (attr in toChangeAttrs){
 					//if user wants to change password
 					if (attr === 'password' && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
 						user.password = user.generateHash(toChangeAttrs[attr]);
 						continue;
 					}
+					
+					//check if we need to make changes	
+					if (attr === 'email' || attr === 'username'){
+						makeCheck = true;
+					}
+
 					//else set normally
 					if (arrayOfAllowedAttrs.indexOf(attr) >= 0 && toChangeAttrs[attr] && toChangeAttrs[attr] != ""){
 						if (attr == 'email' && !tools.validEmail(toChangeAttrs[attr])){
@@ -252,20 +259,43 @@ module.exports = function(app,passport,tools, privateData) {
 						return
 					}
 				}
-				
-				//save user
-				user.save(function(req, user){
-					if (err){
-						console.log("Getting User Info  Error : ",e.message)
-		      	    	res.status(500).send({errorMessage : err.message})
+
+				if (!makeCheck){
+					//save user
+					user.save(function(req, user){
+						if (err){
+							console.log("Getting User Info  Error : ",e.message)
+			      	    	res.status(500).send({errorMessage : err.message})
+							return;
+						}
+
+						res.send({successMessage : "Changes Saved to User"});
+					});
+				}
+				else
+					User.findOne({ $or: [ { 'username': toChangeAttrs.username }, { 'email': toChangeAttrs.email } ] },function(err,otherUser){
+                    // if there are any errors, return the error
+                    if (err){
+                        res.status(500).send({errorMessage : err.message})
 						return;
 					}
+                    if (otherUser) {
+                    	res.status(400).send({errorMessage : "We are sorry username or email you entered are taken"});
+                    	return;
+					}
+					user.save(function(req, user){
+						if (err){
+							console.log("Getting User Info  Error : ",e.message)
+			      	    	res.status(500).send({errorMessage : err.message})
+							return;
+						}
 
-					res.send({successMessage : "Changes Saved to User"});
-				});
+						res.send({successMessage : "Changes Saved to User"});
+					});
 			});
-		});
 
+		});
+	});
 
 	app.route('/api/v1/user/history/location')
 
@@ -326,6 +356,7 @@ module.exports = function(app,passport,tools, privateData) {
 		
 		.get(tools.authenticateUser,function(req,res){
 				req.logout();
+				console.log("User logged out");
 				res.send({message : "User successfully logged out"})
 				return
 		})

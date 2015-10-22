@@ -417,6 +417,50 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			           		});
 			           });
 			    });
+			
+				it("Shouldn't allow users change their email to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: chance.first(),
+									email 		: tester.email
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/user')
+			            .send(toChange)
+			            .set('cookie',cookie)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+	
+
+				it("Shouldn't allow users change their username to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: tester.username,
+									email 		: chance.email({domain : "fakers.com"})
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/user')
+			            .send(toChange)
+			            .set('cookie',cookie)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+		
+
+
 			})	
 		})
 
@@ -425,21 +469,6 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		describe('------API api/v1/user/logout------',function(){
 			this.timeout(20000)
 
-			//login user after logout
-			after(function (done,err) {
-		        request
-			            .post('http://localhost:8000/api/v1/login')
-			            .send({
-			                password: notYetHashed , username: tester.email
-			            })
-			            .end(function(err,res){
-			                expect(res).to.exist;
-			                expect(res.status).to.equal(200);
-			                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
-			                cookie = res.headers['set-cookie'];
-			                done();
-			            });
-			});
 
 
 			it('Should only allow authorized users',function(done){
@@ -899,6 +928,50 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			            	})
 			           });
 			    });
+
+
+			    it("Shouldn't allow users change their email to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: chance.first(),
+									email 		: tester.email
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/phone/user')
+			            .send(toChange)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+	
+
+				it("Shouldn't allow users change their username to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: tester.username,
+									email 		: chance.email({domain : "fakers.com"})
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/phone/user')
+			            .send(toChange)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+		
+
 			})
 
 		})

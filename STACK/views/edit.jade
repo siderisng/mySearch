@@ -1,5 +1,5 @@
 div(id="editInfo")
-	form(ng-model='')
+	form()
 		h3(class='palette3') Change Username :
 		input.form-control(type='text',name="username", placeholder='{{user.username}}',ng-model='edit.username')
 
@@ -12,10 +12,14 @@ div(id="editInfo")
 		h3(class='palette3') Change email :
 		input.form-control(type='text',name="email", placeholder='{{user.email}}',ng-model='edit.email')
 
-		h3(class='palette3') Change Password :
-		input.form-control(type='text',name="password", placeholder='',ng-model='edit.password')
-
 		h3(class='palette3') Change Age :
 		input.form-control(type='text',name="age", placeholder='{{user.age}}',ng-model='edit.age')
 
+		h3(class='palette3') Change Password :
+		input.form-control(type='text',name="password", placeholder='',ng-model='edit.password')
+			
+		h3(class='palette3') Confirm Password :
+		input.form-control(type='text',name="password", placeholder='',ng-model='edit.passwordRep')
+			
+			
 		input.btn.btn-default.btn-lg(ng-click='editInfo()' value='Update my info' type='submit')

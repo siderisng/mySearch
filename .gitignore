@@ -4,4 +4,6 @@ STACK/.git
 STACK/.gitignore
 STACK/Procfile
 STACK/keys
-iOSApp/mySearch/Pods
+iOSApp/Pods
+.DS_STORE
+iOSApp/.DS_STORE

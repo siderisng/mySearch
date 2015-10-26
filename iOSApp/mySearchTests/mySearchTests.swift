@@ -2,7 +2,7 @@
 //  mySearchTests.swift
 //  mySearchTests
 //
-//  Created by Panagiotis Tzimotoudis on 10/24/15.
+//  Created by Panagiotis Tzimotoudis on 10/26/15.
 //  Copyright © 2015 Panagiotis Tzimotoudis. All rights reserved.
 //
 

@@ -5,5 +5,8 @@ STACK/.gitignore
 STACK/Procfile
 STACK/keys
 iOSApp/Pods
+iOSApp/icons
 .DS_STORE
 iOSApp/.DS_STORE
+iOSApp/mySearch/.DS_STORE
+

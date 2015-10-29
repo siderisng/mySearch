@@ -9,10 +9,15 @@
 /* Begin PBXBuildFile section */
 		4CF78A5D0F7CF56F7557BEFE /* Pods_mySearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 686CD7A23C144DD249C639E8 /* Pods_mySearch.framework */; };
 		F15AD7EF876E3289ED7C2C46 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 988EA6B06055A711D0FDFDF8 /* Pods.framework */; };
+		FC118AF91BDEB91900847185 /* LeftMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC118AF81BDEB91900847185 /* LeftMenuController.swift */; settings = {ASSET_TAGS = (); }; };
+		FC6F1BB61BDECC10008EB12E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC6F1BB51BDECC10008EB12E /* Assets.xcassets */; settings = {ASSET_TAGS = (); }; };
+		FC6F1BB81BDEDB1D008EB12E /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6F1BB71BDEDB1D008EB12E /* LoginScreen.swift */; settings = {ASSET_TAGS = (); }; };
+		FC6F1BBA1BDEDBED008EB12E /* MainScreenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6F1BB91BDEDBED008EB12E /* MainScreenController.swift */; settings = {ASSET_TAGS = (); }; };
+		FCCEA8FD1BDFF019000CF0C8 /* SignupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCEA8FC1BDFF019000CF0C8 /* SignupScreen.swift */; settings = {ASSET_TAGS = (); }; };
+		FCCEA9001BDFF272000CF0C8 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCEA8FF1BDFF272000CF0C8 /* SWRevealViewController.m */; settings = {ASSET_TAGS = (); }; };
 		FCD4CBCA1BDEB47E005162C7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD4CBC91BDEB47E005162C7 /* AppDelegate.swift */; };
 		FCD4CBCC1BDEB47E005162C7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD4CBCB1BDEB47E005162C7 /* ViewController.swift */; };
 		FCD4CBCF1BDEB47E005162C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCD4CBCD1BDEB47E005162C7 /* Main.storyboard */; };
-		FCD4CBD11BDEB47E005162C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCD4CBD01BDEB47E005162C7 /* Assets.xcassets */; };
 		FCD4CBD41BDEB47E005162C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCD4CBD21BDEB47E005162C7 /* LaunchScreen.storyboard */; };
 		FCD4CBDF1BDEB47E005162C7 /* mySearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD4CBDE1BDEB47E005162C7 /* mySearchTests.swift */; };
 		FCD4CBEA1BDEB47E005162C7 /* mySearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD4CBE91BDEB47E005162C7 /* mySearchUITests.swift */; };
@@ -40,11 +45,18 @@
 		5B6CEAAA8B069250DE23E067 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		686CD7A23C144DD249C639E8 /* Pods_mySearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mySearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		988EA6B06055A711D0FDFDF8 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC118AF81BDEB91900847185 /* LeftMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftMenuController.swift; sourceTree = "<group>"; };
+		FC118AFB1BDEBC2600847185 /* mySearch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mySearch-Bridging-Header.h"; sourceTree = "<group>"; };
+		FC6F1BB51BDECC10008EB12E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FC6F1BB71BDEDB1D008EB12E /* LoginScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
+		FC6F1BB91BDEDBED008EB12E /* MainScreenController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenController.swift; sourceTree = "<group>"; };
+		FCCEA8FC1BDFF019000CF0C8 /* SignupScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupScreen.swift; sourceTree = "<group>"; };
+		FCCEA8FE1BDFF272000CF0C8 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = SWRevealViewController/SWRevealViewController.h; sourceTree = "<group>"; };
+		FCCEA8FF1BDFF272000CF0C8 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWRevealViewController.m; path = SWRevealViewController/SWRevealViewController.m; sourceTree = "<group>"; };
 		FCD4CBC61BDEB47E005162C7 /* mySearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mySearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCD4CBC91BDEB47E005162C7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FCD4CBCB1BDEB47E005162C7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FCD4CBCE1BDEB47E005162C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		FCD4CBD01BDEB47E005162C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FCD4CBD31BDEB47E005162C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FCD4CBD51BDEB47E005162C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCD4CBDA1BDEB47E005162C7 /* mySearchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mySearchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +112,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FC118AFA1BDEBBF600847185 /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FCCEA8FE1BDFF272000CF0C8 /* SWRevealViewController.h */,
+				FCCEA8FF1BDFF272000CF0C8 /* SWRevealViewController.m */,
+				FC118AFB1BDEBC2600847185 /* mySearch-Bridging-Header.h */,
+			);
+			name = SWRevealViewController;
+			sourceTree = "<group>";
+		};
 		FCD4CBBD1BDEB47E005162C7 = {
 			isa = PBXGroup;
 			children = (
@@ -125,12 +147,17 @@
 		FCD4CBC81BDEB47E005162C7 /* mySearch */ = {
 			isa = PBXGroup;
 			children = (
+				FC118AFA1BDEBBF600847185 /* SWRevealViewController */,
 				FCD4CBC91BDEB47E005162C7 /* AppDelegate.swift */,
+				FC6F1BB51BDECC10008EB12E /* Assets.xcassets */,
 				FCD4CBCB1BDEB47E005162C7 /* ViewController.swift */,
 				FCD4CBCD1BDEB47E005162C7 /* Main.storyboard */,
-				FCD4CBD01BDEB47E005162C7 /* Assets.xcassets */,
 				FCD4CBD21BDEB47E005162C7 /* LaunchScreen.storyboard */,
 				FCD4CBD51BDEB47E005162C7 /* Info.plist */,
+				FC118AF81BDEB91900847185 /* LeftMenuController.swift */,
+				FC6F1BB71BDEDB1D008EB12E /* LoginScreen.swift */,
+				FC6F1BB91BDEDBED008EB12E /* MainScreenController.swift */,
+				FCCEA8FC1BDFF019000CF0C8 /* SignupScreen.swift */,
 			);
 			path = mySearch;
 			sourceTree = "<group>";
@@ -218,6 +245,7 @@
 		FCD4CBBE1BDEB47E005162C7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Panagiotis Tzimotoudis";
 				TargetAttributes = {
@@ -263,7 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCD4CBD41BDEB47E005162C7 /* LaunchScreen.storyboard in Resources */,
-				FCD4CBD11BDEB47E005162C7 /* Assets.xcassets in Resources */,
+				FC6F1BB61BDECC10008EB12E /* Assets.xcassets in Resources */,
 				FCD4CBCF1BDEB47E005162C7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,6 +367,11 @@
 			files = (
 				FCD4CBCC1BDEB47E005162C7 /* ViewController.swift in Sources */,
 				FCD4CBCA1BDEB47E005162C7 /* AppDelegate.swift in Sources */,
+				FCCEA8FD1BDFF019000CF0C8 /* SignupScreen.swift in Sources */,
+				FCCEA9001BDFF272000CF0C8 /* SWRevealViewController.m in Sources */,
+				FC6F1BBA1BDEDBED008EB12E /* MainScreenController.swift in Sources */,
+				FC118AF91BDEB91900847185 /* LeftMenuController.swift in Sources */,
+				FC6F1BB81BDEDB1D008EB12E /* LoginScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,10 +514,13 @@
 			baseConfigurationReference = 5B6CEAAA8B069250DE23E067 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = mySearch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Panagiotis-Tzimotoudis.mySearch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "mySearch/mySearch-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -493,10 +529,12 @@
 			baseConfigurationReference = 23B259A7F845729E4A9155CD /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = mySearch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Panagiotis-Tzimotoudis.mySearch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "mySearch/mySearch-Bridging-Header.h";
 			};
 			name = Release;
 		};

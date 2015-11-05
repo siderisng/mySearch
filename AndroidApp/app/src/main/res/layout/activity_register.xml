@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +13,7 @@
         />
 
     <EditText
-        android:id="@+id/Email"
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
@@ -27,20 +26,7 @@
         />
 
     <EditText
-        android:id="@+id/Username"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:text="Name"
-        android:layout_height="wrap_content"
-        />
-
-    <EditText
-        android:id="@+id/Name"
+        android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
@@ -53,22 +39,24 @@
         />
 
     <EditText
-        android:id="@+id/Password"
+        android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
+        android:inputType="textPassword"
         android:layout_height="wrap_content"
         />
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="RepeatPassword"
+        android:text="Repeat Password"
         android:layout_height="wrap_content"
         />
 
     <EditText
-        android:id="@+id/RepeatPassword"
+        android:id="@+id/etRepPass"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
+        android:inputType="textPassword"
         android:layout_height="wrap_content"
         />
 
@@ -79,7 +67,7 @@
         />
 
     <EditText
-        android:id="@+id/Name"
+        android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
@@ -99,7 +87,7 @@
         />
 
     <Button
-        android:id="@+id/Register"
+        android:id="@+id/bRegister"
         android:text="Register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

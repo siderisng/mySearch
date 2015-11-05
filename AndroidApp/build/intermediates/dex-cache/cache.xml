@@ -2,46 +2,46 @@
 <items version="2" >
 
     <item
-        jar="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
-        <dex dex="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/pre-dexed/debug/classes-400c8234c82e8d7a0722417842f83e215db19785.jar" />
-    </item>
-    <item
-        jar="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/exploded-aar/com.android.support/design/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
-        <dex dex="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/pre-dexed/debug/classes-bf1e246b8ce2e0ca42bb1d4a623d2683335b17da.jar" />
-    </item>
-    <item
-        jar="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/jars/classes.jar"
+        jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
-        <dex dex="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/pre-dexed/debug/classes-b3bbfa6b882baec476637e18d0c50aa5de552278.jar" />
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\classes-07ed47b97fe8166c420d01e73f75fc271e997cf2.jar" />
     </item>
     <item
-        jar="/home/tsokos/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
+        jar="C:\Users\Shadowvault\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.0\support-annotations-23.1.0.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="92e3fc113ec3ee36b64603a38857b95700025633">
-        <dex dex="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-1b544d304b7224007d594f2906001143baa7a2d5.jar" />
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\support-annotations-23.1.0-70717c079d080fc1780fb476dbea5be50d81ee74.jar" />
     </item>
     <item
-        jar="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
+        jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\design\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\classes-51717e1ebfab78fa9692cbb775d6b5f56ad1f050.jar" />
+    </item>
+    <item
+        jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\classes-adc6e8ba790a529e56f8d50784aad2eadc80df57.jar" />
+    </item>
+    <item
+        jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
-        <dex dex="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/pre-dexed/debug/classes-a9e4d9dc8d1d0b866c44849b68a05d2a466e885f.jar" />
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\classes-e0324e21c0699e2cbb154191aa71aa9b84c0cd18.jar" />
     </item>
     <item
-        jar="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\libs\internal_impl-23.1.0.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
-        <dex dex="/home/tsokos/Desktop/Projects/Javascript/mySearch/AndroidApp/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-03e9c94912eae29422ed9a194b467b1a0a4dba1d.jar" />
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\internal_impl-23.1.0-704c83a4c29f50624386e1e5e3c892c07d3d78a6.jar" />
     </item>
 
 </items>

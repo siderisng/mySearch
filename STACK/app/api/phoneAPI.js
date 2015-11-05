@@ -393,9 +393,9 @@ module.exports = function(app,tools, privateData) {
 		*@apiSuccessExample {json} Success-Response:
         *	  {
         *		resultsArray : [
-		*
-		*
-        *				]
+		*					{lat : latitude, lng : longitude}
+		*						...
+		*					]
         *		}
         *
 		*@apiError 400 BAD REQUEST

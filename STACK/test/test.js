@@ -1003,6 +1003,26 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 
 			})		
 
+			it("Should return an array of locations",function(done){
+				var reqData = {
+					location 	: userLocation,
+					search_type : "Cafe",
+					radius 		: 100
+				}
+
+				request
+			            .post('http://localhost:8000/api/v1/phone/search')
+			            .send(reqData)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                expect(res).to.exist;
+			                expect(res.status).to.equal(200);
+			               	expect(res.body[0].lng).to.exist;
+			               	expect(res.body[0].lat).to.exist;
+			                done();		               
+			            });
+
+			})		
 		
 		})	
 		

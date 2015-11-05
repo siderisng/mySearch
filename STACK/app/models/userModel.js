@@ -21,7 +21,7 @@ var UserSchema = Schema({
 	age					: Number,  ///User's age
 	onPhoneSession		: Boolean, ///Set to true when user is logged in phone
 	sessionCode			: String,   ///Phone's session code 
-	requestHistory      : [ type: Schema.Types.ObjectId ], //A list of all requests this user is linked to
+	requestHistory      : [ Schema.Types.ObjectId ], //A list of all requests this user is linked to
 	hasActiveRequest    : { yes : {type : Boolean, default : false}, current : { type: Schema.Types.ObjectId, ref: 'Request' }}
 });
 

@@ -346,7 +346,7 @@
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "   {\n\t\tlocation : {\n\t\t\tlongtitude :\tlocation_longtitude,\n\t\t\tlatitude   :\tlocation_latitude\n\t\t},\n\t\tsearch_type : what_user_is_looking_for\n\t}",
+          "content": "   {\n\t\tlocation : {\n\t\t\tlongitude :\tlocation_longtitude,\n\t\t\tlatitude   :\tlocation_latitude\n\t\t},\n\t\tsearch_type : what_user_is_looking_for,\n\t\tradius\t\t: radius for search (default 1 KLM)\n\t}",
           "type": "json"
         }
       ]

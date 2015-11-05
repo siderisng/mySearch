@@ -31,12 +31,12 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		var notYetHashed; //User password before hashing
 		var cookie;		 //Cookie to use through the session
 		var fakeCookie = "I'm A Little Fake Cookie"; //Fake cookie to test security
-			
+		this.timeout(20000)	
 		//--------------------API/V1/LOGIN------------------------//
 
 		//before anything happens create fake user 
 		before('Create and log fake User in',function(done){
-			this.timeout(20000)
+			
 			//create fake user with fake credentials with fake fakity fakes fakers ....
 			tester = new User({	email 		: chance.email({domain: 'test.com'}),
 									password 	: chance.string(),
@@ -516,7 +516,12 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		var fakeHeaders//fake headers
 		var tester;
 		var notYetHashed;
+		var userLocation = {
+			longitude : 39.363508,
+			latitude  : 22.950609
+		}
 		this.timeout(20000)
+
 
 		//before anything happens create fake user 
 		before('Create and log fake phone User in',function(done){
@@ -975,6 +980,31 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			})
 
 		})
+
+		describe('------API /api/v1/phone/search------',function(){
+
+			it("Shouldn't let user search for something that's not in the list",function(done){
+				var reqData = {
+					location : userLocation,
+					search_type : "bongers",
+				}
+
+				request
+			            .post('http://localhost:8000/api/v1/phone/search')
+			            .send(reqData)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			               	expect(res.body.errorMessage).to.equal("Not a valid search type")
+			                done();		               
+			            });
+
+
+			})		
+
+		
+		})	
 		
 
 		describe('------API /api/v1/phone/user/logout------',function(){
@@ -999,9 +1029,6 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 								});		    
 			            })
 			})
-
-
 		})
-	
 	});
 });

@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////
 
 
-//Basic City Model
+//Basic City Model //unique southpark reference
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 
@@ -15,7 +15,7 @@ var requestSchema = mongoose.Schema({
 		northeast : { 
 			longitude : {type : String, default : -1},
 			latitude : {type : String, default : -1},
-		}
+		},
 		southwest :{
 			longitude : {type : String, default : -1},
 			latitude : {type : String, default : -1},
@@ -30,12 +30,12 @@ var requestSchema = mongoose.Schema({
 				northeast : { 
 					longitude : {type : String, default : -1},
 					latitude : {type : String, default : -1},
-				}
+				},
 				southwest :{
 					longitude : {type : String, default : -1},
 					latitude : {type : String, default : -1},
 			},
-			requests:[type: Schema.Types.ObjectId] //requests in this zones
+			requests:[Schema.Types.ObjectId] //requests in this zones
 		} 	
 	}]
 

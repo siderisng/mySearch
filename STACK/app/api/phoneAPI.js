@@ -2,9 +2,9 @@
 //////////AUTHORS :   chocof (https://github.com/chocof)/////
 //////////File :  app/api/phoneAPI.js             /////////
 /////////////////////////////////////////////////////////////
-const GOOGLE_URL = "https://maps.googleapis.com/maps/api/place/radarsearch/json?"
+const GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/radarsearch/json?"
 const KILOMETER  = 1000
-
+const GOOGLE_GEO_URL    = "https://maps.googleapis.com/maps/api/geocode/json?"
 //for making http requests to google API's
 var rp = require('request-promise');
 var cc = require('coupon-code');
@@ -12,7 +12,9 @@ var cc = require('coupon-code');
 //for parsing
 var qs = require('qs');
 
-var User = require('../models/userModel');        ///User's Model
+var User 	= require('../models/userModel');        ///User's Model
+var Request = require('../models/requestModel');     ///Request's model for creating new requests   
+var City 	= require('../models/cityModel');		 ///City Model (southpark again). Used for finding all city information(and again)
 
 module.exports = function(app,tools, privateData) {
 
@@ -189,73 +191,6 @@ module.exports = function(app,tools, privateData) {
 			});
 		})
 
-
-	app.route("/api/v1/phone/search")
-		
-		/**
- 		*@api {post} /api/v1/phone/search Gets nearby locations depending on users' search
- 		*@apiName phoneSearch
- 		*@apiGroup Phone
- 		*
- 		*@apiHeaderExample {json} Header-Example: 
-		*	{
-		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
-		*	}
-		*
-		*
-		*@apiParam {json} User's username or email in the field username and password on password
- 		*@apiParamExample {json} Request-Example:
-        *    {
-        *		location : {
-		*			longtitude :	location_longtitude,
-		*			latitude   :	location_latitude
-		*		},
-        *		search_type : what_user_is_looking_for
-		*	}
-		*
-		*@apiSuccess {String} successMessage Success message
-		*@apiSuccessExample {json} Success-Response:
-        *	  {
-        *		resultsArray : [
-		*
-		*
-        *				]
-        *		}
-        *
-		*@apiError 400 BAD REQUEST
-		*@apiError 401 Authorization Failed
-		*@apiError 404 Couldn't find user
-        *@apiError 500 Internal Server Error
-        *@apiErrorExample {json} Error-Response:
- 		*     {errorMessage: ERROR_MESSAGE }
- 		*/
-		.post(tools.authenticateUserPhone, function(req, res, next){
-
-			var url = GOOGLE_URL + "location=" 
-			
-			//specify location
-			url = url + req.body.location.longtitude + "," + req.body.location.latitude + "&" 
-
-			//specify radius
-			url = url + "radius=" + KILOMETER + "&"
-
-			//specify search type
-			url = url + "type="   +  + "&"
-
-			var url = url + privateData.googleApiKey
-
-			rp(url)
-			.then(function(result){
-
-
-
-
-			})
-			.catch(function (err){
-				res.status(500).send({message : err.message})
-			});
-		})
-
 	app.route ( "/api/v1/phone/user" )
 
 		/**
@@ -425,6 +360,167 @@ module.exports = function(app,tools, privateData) {
 			});
 		});
 	});
+
+	
+
+
+
+	app.route("/api/v1/phone/search")
+		
+		/**
+ 		*@api {post} /api/v1/phone/search Gets nearby locations depending on users' search
+ 		*@apiName phoneSearch
+ 		*@apiGroup Phone
+ 		*
+ 		*@apiHeaderExample {json} Header-Example: 
+		*	{
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*	}
+		*
+		*
+		*@apiParam {json} User's username or email in the field username and password on password
+ 		*@apiParamExample {json} Request-Example:
+        *    {
+        *		location : {
+		*			longitude :	location_longtitude,
+		*			latitude   :	location_latitude
+		*		},
+        *		search_type : what_user_is_looking_for,
+        *		radius		: radius for search (default 1 KLM)
+		*	}
+		*
+		*@apiSuccess {String} successMessage Success message
+		*@apiSuccessExample {json} Success-Response:
+        *	  {
+        *		resultsArray : [
+		*
+		*
+        *				]
+        *		}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+		*@apiError 404 Couldn't find user
+        *@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/
+		.post(tools.authenticateUserPhone, function(req, res, next){
+			
+			var sessionData = qs.parse(req.headers.authorization)
+		
+
+			User.findOne({"username" : sessionData.username}, function(err,user){
+				var url = GOOGLE_PLACES_URL + "location=" 
+				
+				var location = req.body.location
+				//check if location is not JSON parsed
+				if (!location.longitude)
+					location = JSON.parse(location);
+				//specify location
+				url = url + location.longitude + "," + location.latitude + "&" 
+				//specify radius
+				url = url + "radius=" + ((req.body.radius)?req.body.radius:KILOMETER) + "&"
+				//specify search type
+				if (!req.body.search_type || tools.availableSearches.indexOf(req.body.search_type) < 0){
+					res.status(400).send( {errorMessage : "Not a valid search type"} )
+					return;
+				}
+						
+				url = url + "type="   + req.body.search_type + "&key="
+
+				var url = url + privateData.googleApiKey
+				//send request to google Places Api
+				rp(url)
+				.then(function(resultRaw){
+					//parse request
+					var resp = JSON.parse(resultRaw);
+					editResult(req,res,user,location,resp.results)
+				})
+				.catch(function (err){
+					console.log("Error during places post " + err.message);
+				});
+			})
+		})
+
+		/**
+			This function gets the result from google Places API 
+			edits it and then responds to user
+		*/
+		function editResult(req,res,user,location,googleRes){
+			var returnArray = [];
+			for (var i = 0; i < googleRes.length; i++) {
+			    returnArray.push(googleRes[i].geometry.location);
+			}	
+
+			//respond to user with the request
+			res.send(returnArray);
+
+			//Now get user Location using geolocation
+			var url = GOOGLE_GEO_URL + 'latlng=' + location.longitude + ',' + location.latitude + '&key=' + privateData.googleApiKey;
+			rp(url)
+				.then(function(resultRaw){
+					var resp = JSON.parse(resultRaw);
+					storeResToDB(user,location,resp.results[1],returnArray,req.body.search_type)
+				})
+				.catch(function (err){
+					console.log("Error during geolocation post " + err.message);	
+				});
+
+
+		};
+
+		function storeResToDB(user,location,locationG,arrayWithResp, search_type){
+			//parse request to find city info
+			var locInfo 	= locationG.formatted_address.split(',');
+			var cityLoc    	= locInfo[0].replace(/\s+/, "") 
+			var countryLoc 	= locInfo[1].replace(/\s+/, "") 
+				
+			//create new Request	
+			var newReq = new Request({ country 			: countryLoc,
+										city   			: cityLoc,
+										location		: location,
+										query			: search_type,
+										googleResults 	: arrayWithResp	
+										});
+			//now find the city where this request where made
+			//in the database
+			City.findOne({name : cityLoc},function(err,city){
+
+				//if there is not such city create a new one
+				if (!city){
+					city = new City({ name : cityLoc});
+
+					city.location.northeast.longitude 	= locationG.geometry.bounds.northeast.lng;
+					city.location.northeast.latitude 	= locationG.geometry.bounds.northeast.lat;
+					city.location.southwest.longitude 	= locationG.geometry.bounds.southwest.lng;
+					city.location.southwest.latitude 	= locationG.geometry.bounds.southwest.lat;
+				}
+				//add new request to city
+				city.listOfRequests.push(newReq._id);
+
+				//now add new request to user list of requests
+				user.requestHistory.push(newReq);
+
+				//now save each and every one of them
+				saveToDB([user,newReq,city]);	
+
+			})
+
+
+		}
+		
+		//recursively save a list 
+		//of entities
+		//Used in order to save more than one entities
+		function saveToDB(stack){
+			var entity = stack.pop();
+			if (entity)
+				entity.save(function(err){
+					saveToDB(stack)
+				})
+		}
+
 	
 	/**
  		*@api {get} /api/v1/phone/logout Logs user out of the session
@@ -466,7 +562,7 @@ module.exports = function(app,tools, privateData) {
 						res.status(500).send( {errorMessage : err.message} )
 						return;
 					}
-					console.log("User "+user.username+"logged out");
+					console.log("User "+user.username+" logged out");
 					res.send({successMessage : "You Logged Out Of Session"})	
 				})	
 
@@ -474,6 +570,4 @@ module.exports = function(app,tools, privateData) {
 			})
 
 		})
-
-
 }

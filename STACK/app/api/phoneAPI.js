@@ -481,7 +481,8 @@ module.exports = function(app,tools, privateData) {
 										city   			: cityLoc,
 										location		: location,
 										query			: search_type,
-										googleResults 	: arrayWithResp	
+										googleResults 	: arrayWithResp,
+										date 			: new Date()	
 										});
 			//now find the city where this request where made
 			//in the database

@@ -79,8 +79,17 @@ module.exports = {
         return re.test(email)
     },
 
-
-    availableSearches : [  	"Airport", "Amusement park","Aquarium", "Art gallery", "Atm", "Bakery","Bank", "Bar"
+    //recursively save a list 
+		//of entities
+		//Used in order to save more than one entities
+	saveToDB : function (stack){
+		var entity = stack.pop();
+		if (entity)
+			entity.save(function(err){
+				saveToDB(stack)
+			})
+	},
+	availableSearches : [  	"Airport", "Amusement park","Aquarium", "Art gallery", "Atm", "Bakery","Bank", "Bar"
     						,"Beauty salon", "Bicycle store","Book store", "Bowling alley", "Bus station", "Cafe"
     						, "Campground", "Car dealer", "Car rental", "Car repair", "Car wash", "Casino", "Church"
     						,"City hall", "Clothing store", "Convenience store", "Courthouse", "Dentist", "Department store"

@@ -378,7 +378,7 @@ module.exports = function(app,tools, privateData) {
 		*	}
 		*
 		*
-		*@apiParam {json} User's username or email in the field username and password on password
+		*@apiParam {json} Current User Location, query,radius
  		*@apiParamExample {json} Request-Example:
         *    {
         *		location : {
@@ -416,7 +416,12 @@ module.exports = function(app,tools, privateData) {
 				var location = req.body.location
 				//check if location is not JSON parsed
 				if (!location.longitude)
-					location = JSON.parse(location);
+					try {
+						location = JSON.parse(location);
+					}catch(e){
+						res.status(400).send({errorMessage : "Invalid Data please try again"})
+						return;
+					} 
 				//specify location
 				url = url + location.longitude + "," + location.latitude + "&" 
 				//specify radius
@@ -504,25 +509,135 @@ module.exports = function(app,tools, privateData) {
 				user.requestHistory.push(newReq);
 
 				//now save each and every one of them
-				saveToDB([user,newReq,city]);	
+				tools.saveToDB([user,newReq,city]);	
 
 			})
 
 
 		}
-		
-		//recursively save a list 
-		//of entities
-		//Used in order to save more than one entities
-		function saveToDB(stack){
-			var entity = stack.pop();
-			if (entity)
-				entity.save(function(err){
-					saveToDB(stack)
-				})
-		}
+
+	app.route('/api/v1/phone/statistics')	
+		/**
+ 		*@api {get} /api/v1/phone/statistics Returns a list of data ready to be plotted(graphs,maps,etc)
+ 		*@apiName phoneStats
+ 		*@apiGroup Phone
+ 		*
+ 		*@apiHeaderExample {json} Header-Example: 
+		*	{
+		*		"authorization": "username=<user_username>&sessionCode=<code_we_gave_you_in_login>"
+		*	}
+		*
+		*@apiSuccess {String} successMessage Success message
+		*@apiSuccessExample {json} Success-Response:
+        *	  
+        *		{
+		*				graph 		:  Array_dates-nofRequest_in_dates,
+		*				chart 		:  Array_queries-nofRequest_to_these_queries,
+		*				cities 		:  cities,
+		*				maps		:  locations	
+		*			
+        *		}
+        *
+		*@apiError 400 BAD REQUEST
+		*@apiError 401 Authorization Failed
+		*@apiError 404 Couldn't find user
+        *@apiError 500 Internal Server Error
+        *@apiErrorExample {json} Error-Response:
+ 		*     {errorMessage: ERROR_MESSAGE }
+ 		*/
+		.get(tools.authenticateUserPhone, function(req, res, next){
+			
+			var sessionData = qs.parse(req.headers.authorization)
+			
+			//first find user
+			User.findOne({"username" : sessionData.username}, function(err,user){
+				if (err){
+					res.status(500).send({errorMessage : "An Error Happened" + err.message})
+					return;
+				}
+
+				//then find all the requests made
+				Request.find({_id : { $in: user.requestHistory}},function(err,listOfRequests){
+					if (err){
+						res.status(500).send({errorMessage : "An Error Happened" + err.message})
+						return;
+					}	
+
+					if (!listOfRequests[0]){
+						res.status(404).send({errorMessage : "Seems like you don't have any requests"})
+						return;
+					}
+
+					//Create pie chart array
+					var pieChart = [];
+					//create object to populate
+					var pieChartObj = {};
+
+					//create graph representation array
+					var timeGraphAr = [];
+					//create object to populate with dates and entries
+					var timeObj = {};
+
+					//create city array 
+					var locations = [];
+
+					//create location array for maps
+					var cities = [];
+
+
+					for (i = 0; i < listOfRequests.length; i ++){
+						var req = listOfRequests[i];
+						
+						//Find nof queries of each type for the pie chart
+						if (!pieChartObj[req.query])
+							pieChartObj[req.query] = 0;
+						pieChartObj[req.query]++;
+					
+						//Find nof queries made in each date
+						if (!timeObj[req.date.getTime()])
+							timeObj[req.date.getTime()] = 0;
+						timeObj[req.date.getTime()]++;
+					
+					    //add new city
+					    if (cities.indexOf(req.city) < 0)
+					    	cities.push(req.city)
+						
+						//add req locations
+					    locations.push(req.location)
+
+
+					}
+
+					//add data to timeGraph array
+					for (entry in timeObj){
+						timeGraphAr.push({
+								keys : {
+									x : 'timestamp'
+								},
+								json : {
+									data  		: timeObj[entry],
+									timestamp 	: entry
+								}	
+							});
+					}	
+					//now pass to array in c3js form 
+					for (qry in pieChartObj)
+						pieChart.push([qry, pieChartObj[qry]])
+
+					res.send({
+						graph 		:  timeGraphAr,
+						chart 		:  pieChart,
+						cities 		:  cities,
+						maps		:  locations	
+					});
+				});
+			});
+		});
 
 	
+
+	app.route("/api/v1/phone/user/logout")
+
 	/**
  		*@api {get} /api/v1/phone/logout Logs user out of the session
  		*@apiName PhoneLogout
@@ -542,8 +657,6 @@ module.exports = function(app,tools, privateData) {
         *@apiErrorExample {json} Error-Response:
  		*     {errorMessage: ERROR_MESSAGE }
  		*/	
-	app.route("/api/v1/phone/user/logout")
-
 		.get(tools.authenticateUserPhone, function(req,res){
 			var sessionData = qs.parse(req.headers.authorization)
 

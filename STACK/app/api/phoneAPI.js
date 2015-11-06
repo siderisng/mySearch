@@ -393,7 +393,10 @@ module.exports = function(app,tools, privateData) {
 		*@apiSuccessExample {json} Success-Response:
         *	  {
         *		resultsArray : [
-		*					{lat : latitude, lng : longitude}
+		*					{
+		*						location : {lat : latitude, lng : longitude},
+		*						place_id : UNIQUE_PLACE_ID
+		*					}
 		*						...
 		*					]
         *		}

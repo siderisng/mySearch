@@ -455,7 +455,7 @@ module.exports = function(app,tools, privateData) {
 		function editResult(req,res,user,location,googleRes){
 			var returnArray = [];
 			for (var i = 0; i < googleRes.length; i++) {
-			    returnArray.push(googleRes[i].geometry.location);
+			    returnArray.push({location : googleRes[i].geometry.location , place_id : googleRes[i].place_id});
 			}	
 
 			//respond to user with the request

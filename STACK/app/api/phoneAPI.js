@@ -509,11 +509,17 @@ module.exports = function(app,tools, privateData) {
 				user.requestHistory.push(newReq);
 
 				//now save each and every one of them
-				tools.saveToDB([user,newReq,city]);	
+				saveToDB([user,newReq,city]);	
 
 			})
+		}
 
-
+		function saveToDB(stack){
+			var entity = stack.pop();
+			if (entity)
+				entity.save(function(err){
+					saveToDB(stack)
+				})
 		}
 
 	app.route('/api/v1/phone/statistics')	
@@ -584,6 +590,9 @@ module.exports = function(app,tools, privateData) {
 					//create location array for maps
 					var cities = [];
 
+					//booleans checking if there 
+					//is a need to create new date obj
+					var needToInit 	= true;
 
 					for (i = 0; i < listOfRequests.length; i ++){
 						var req = listOfRequests[i];
@@ -594,9 +603,18 @@ module.exports = function(app,tools, privateData) {
 						pieChartObj[req.query]++;
 					
 						//Find nof queries made in each date
-						if (!timeObj[req.date.getTime()])
-							timeObj[req.date.getTime()] = 0;
-						timeObj[req.date.getTime()]++;
+						for (entry in timeObj){ //check if we have such a date
+							if (isSameDay(new Date(entry),req.date)){
+								needToInit = false;
+								req.date = entry;
+								break;
+							}
+						}
+						if (needToInit)
+							timeObj[req.date] = 0;
+								
+
+						timeObj[req.date]++;
 					
 					    //add new city
 					    if (cities.indexOf(req.city) < 0)
@@ -634,7 +652,12 @@ module.exports = function(app,tools, privateData) {
 			});
 		});
 
-	
+	function isSameDay (date1,date2){
+		
+		return (date1.getDate() == date2.getDate() 
+        && date1.getMonth() == date2.getMonth()
+        && date1.getFullYear() == date2.getFullYear())
+	}
 
 	app.route("/api/v1/phone/user/logout")
 

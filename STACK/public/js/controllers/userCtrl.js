@@ -111,6 +111,8 @@ angular.module('mySearch')
 					console.log("WHATT?")
 					Notification.error(err)
 				})
+		else
+			createCharts();
 	}
 
 

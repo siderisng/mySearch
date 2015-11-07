@@ -8,7 +8,7 @@ angular.module('mySearch')
 	$scope.chart = {};
 	$scope.cities  = {};
 	$scope.maps  = {};
-	
+	$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 	var dateGraphConf = {
 		bindto : '#dateGraph',
 		axis : {
@@ -41,8 +41,8 @@ angular.module('mySearch')
 				value : ['requests']
 			}
 		},
-	  	//for our legend
-	  	legend : {
+		//for our legend
+		legend : {
 			position : "right",
 			inset: {
 				anchor: 'top-left',
@@ -50,12 +50,12 @@ angular.module('mySearch')
 				y: 10,
 				step: 3
 			}
-	  	},
-	  	//enable zoom
-	  	zoom : {
+		},
+		//enable zoom
+		zoom : {
 			enabled : true,
 			rescale : true
-	  	}
+		}
   }
 
 
@@ -97,22 +97,26 @@ angular.module('mySearch')
 
 
 
-	$scope.gatherData = function(){
+	$scope.gatherData = function(page){
 
+		if (page == 'statistics')
+			callback = createCharts;
+		else if (page == 'maps')
+			callback = createMap;
 		if (!$scope.gotData)
 			userInfo.getData()
 				.success(function(data){
 					$scope.gotData = true;
 					console.log(data)
 					copyObject(data,$scope);
-					createCharts();
+					callback();
 				})
 				.error(function(err){
-					console.log("WHATT?")
 					Notification.error(err)
 				})
 		else
-			createCharts();
+			callback();
+
 	}
 
 
@@ -148,7 +152,43 @@ angular.module('mySearch')
 		//add data to graph
 		dateGraphConf.data.json = $scope.graph;
 		$scope.dateGraph = c3.generate(dateGraphConf)
-	   	
+		
+	}
+
+	function createMap(){
+		//create map
+		var bounds = new google.maps.LatLngBounds();
+		$scope.map = new google.maps.Map(document.getElementById('map'), {
+		   center: new google.maps.LatLng(39.357493,22.950634),
+			zoom : 5
+		});
+		
+
+		var markers = $scope.maps;
+		
+		var infoWindow = new google.maps.InfoWindow(), marker, i;
+		
+		// Loop through our array of markers & place each one on the map  
+		for( i = 0; i < markers.length; i++ ) {
+			var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+			bounds.extend(position);
+			marker = new google.maps.Marker({
+				position: position,
+				map: $scope.map,
+				title: markers[i][0]
+			});
+			
+			// Allow each marker to have an info window    
+			google.maps.event.addListener(marker, 'click', (function(marker, i) {
+				return function() {
+					infoWindow.setContent(markers[i][0]);
+					infoWindow.open($scope.map, marker);
+				}
+			})(marker, i));
+
+			// Automatically center the map fitting all markers on the screen
+			$scope.map.fitBounds(bounds);
+		}
 	}
 
 }]);

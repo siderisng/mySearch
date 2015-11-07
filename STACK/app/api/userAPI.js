@@ -430,7 +430,7 @@ module.exports = function(app,passport,tools, privateData) {
 							cities.push(req.city)
 						
 						//add req locations
-						locations.push(req.location)
+						locations.push([req.city + ',' + req.country,req.location.longitude,req.location.latitude])
 					}
 
 					//format time

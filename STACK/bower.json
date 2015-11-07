@@ -19,10 +19,8 @@
     "angular-resource": "~1.4.5",
     "angular-ui-notification": "~0.0.14",
     "angular-ui-router": "~0.2.15",
-    "angular-ui-router.stateHelper": "~1.3.1",
     "bootstrap": "~3.3.5",
     "c3": "~0.4.10",
-    "cryptojslib": "~3.1.2",
     "font-awesome": "~4.4.0",
     "reveal-highlight-themes": "~8.4.0"
   }

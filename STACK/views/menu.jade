@@ -4,7 +4,6 @@
 //////////////////////////////////////////////////////
 
 
-
 div(class="jumbotron",ng-controller='userCtrl',ng-init="__init__()")
 
 	.navbar-wrapper
@@ -30,11 +29,11 @@ div(class="jumbotron",ng-controller='userCtrl',ng-init="__init__()")
 						li
 							br
 							br
-							a(ui-sref="userStats") myStatistics
+							a(ui-sref="menu.stats()") myStatistics
 						li
 							br
 							br
-							a(ui-sref="userGraphs") myGraphs
+							a(ui-sref="menu.maps()") myGraphs
 						li
 							br
 							br

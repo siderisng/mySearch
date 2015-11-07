@@ -39,6 +39,19 @@ module.exports = function(app) {
 		
 	})
 
+	//send to edit user
+	app.get('/statistics',function(req,res){
+		
+		res.render('statistics.jade');	
+		
+	})
+
+	app.get('/maps',function(req,res){
+		
+		res.render('maps.jade');	
+		
+	})
+
 	//redirect unknown requests to home
 	app.get('*',function(req,res){
 

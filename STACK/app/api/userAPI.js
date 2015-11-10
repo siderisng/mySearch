@@ -297,45 +297,6 @@ module.exports = function(app,passport,tools, privateData) {
 
 		});
 	});
-
-	app.route('/api/v1/user/history/location')
-
-
-		.get(tools.authenticateUser, function(req,res){
-
-			User.findById(req.user, function(err,user){
-				if (err){
-					console.log("Getting User History Error : ",e.message)
-					res.status(500).send({errorMessage : err.message})
-					return;
-
-				}
-
-				res.send({history : user.locationHistory})
-
-
-			})
-
-		})
-	
-
-	app.route('/api/v1/user/history/searches')
-
-
-		.get(tools.authenticateUser, function(req,res){
-
-			User.findById(req.user, function(err,res){
-				if (err){
-					console.log("Getting User History Error : ",e.message)
-					res.status(500).send({errorMessage : err.message})
-					return;
-
-				}
-
-				res.send({history : user.searchesHistory })
-			})
-
-		})
 	
 	app.route('/api/v1/user/statistics')	
 		/**

@@ -378,7 +378,7 @@ module.exports = function(app,tools, privateData) {
 		*	}
 		*
 		*
-		*@apiParam {json} User's username or email in the field username and password on password
+		*@apiParam {json} Current User Location, query,radius
  		*@apiParamExample {json} Request-Example:
         *    {
         *		location : {
@@ -393,7 +393,10 @@ module.exports = function(app,tools, privateData) {
 		*@apiSuccessExample {json} Success-Response:
         *	  {
         *		resultsArray : [
-		*					{lat : latitude, lng : longitude}
+		*					{
+		*						location : {lat : latitude, lng : longitude},
+		*						place_id : UNIQUE_PLACE_ID
+		*					}
 		*						...
 		*					]
         *		}
@@ -416,7 +419,12 @@ module.exports = function(app,tools, privateData) {
 				var location = req.body.location
 				//check if location is not JSON parsed
 				if (!location.longitude)
-					location = JSON.parse(location);
+					try {
+						location = JSON.parse(location);
+					}catch(e){
+						res.status(400).send({errorMessage : "Invalid Data please try again"})
+						return;
+					} 
 				//specify location
 				url = url + location.longitude + "," + location.latitude + "&" 
 				//specify radius
@@ -450,7 +458,7 @@ module.exports = function(app,tools, privateData) {
 		function editResult(req,res,user,location,googleRes){
 			var returnArray = [];
 			for (var i = 0; i < googleRes.length; i++) {
-			    returnArray.push(googleRes[i].geometry.location);
+			    returnArray.push({location : googleRes[i].geometry.location , place_id : googleRes[i].place_id});
 			}	
 
 			//respond to user with the request
@@ -507,13 +515,8 @@ module.exports = function(app,tools, privateData) {
 				saveToDB([user,newReq,city]);	
 
 			})
-
-
 		}
-		
-		//recursively save a list 
-		//of entities
-		//Used in order to save more than one entities
+
 		function saveToDB(stack){
 			var entity = stack.pop();
 			if (entity)
@@ -522,7 +525,9 @@ module.exports = function(app,tools, privateData) {
 				})
 		}
 
-	
+
+	app.route("/api/v1/phone/user/logout")
+
 	/**
  		*@api {get} /api/v1/phone/logout Logs user out of the session
  		*@apiName PhoneLogout
@@ -542,8 +547,6 @@ module.exports = function(app,tools, privateData) {
         *@apiErrorExample {json} Error-Response:
  		*     {errorMessage: ERROR_MESSAGE }
  		*/	
-	app.route("/api/v1/phone/user/logout")
-
 		.get(tools.authenticateUserPhone, function(req,res){
 			var sessionData = qs.parse(req.headers.authorization)
 

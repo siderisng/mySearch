@@ -7,6 +7,13 @@ body {
 	text-shadow:1px 1px #000;
 	padding:0px 20px;
 	background:#85C4B9;
+	.c3-ygrid-line text{
+    	fill: black;
+	}
+	.c3-ygrid-line line{
+  		stroke-width: 5px;
+  		stroke: grey;
+	}
 }
 
 .palette1{color:#D13D38!important;}
@@ -255,4 +262,17 @@ h1{
 
 #editInfo h3{
 	text-shadow:none;
+}
+#map {
+    height:420px;
+    width:600px;
+}
+.infoWindowContent {
+    font-size:  14px !important;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+h2 {
+    margin-bottom:0;
+    margin-top: 0;
 }

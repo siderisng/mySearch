@@ -73,6 +73,18 @@ mySearch
               templateUrl : 'edit'
             })
 
+            //statistics
+            .state('menu.stats',{
+              url : '/statistics',
+              templateUrl : 'statistics'
+            })
+
+            //statistics
+            .state('menu.maps',{
+              url : '/maps',
+              templateUrl : 'maps'
+            })
+        
         $locationProvider.html5Mode(true);
 
         

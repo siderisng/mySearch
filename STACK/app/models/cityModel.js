@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////
 
 
-//Basic City Model //unique southpark reference
+//City Model //unique southpark reference
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 

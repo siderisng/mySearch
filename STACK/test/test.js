@@ -1006,7 +1006,7 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			it("Should return an array of locations",function(done){
 				var reqData = {
 					location 	: userLocation,
-					search_type : "Cafe",
+					search_type : "cafe",
 					radius 		: 100
 				}
 

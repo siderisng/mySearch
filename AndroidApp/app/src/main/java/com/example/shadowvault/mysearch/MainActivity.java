@@ -69,22 +69,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void Login() throws Exception {
 
-        if (etUsernameMail.getText().toString() ==  "" || etPassword.getText().toString() ==  ""){
-            etUsernameMail.setText("");
-            etPassword.setText("");
-        }
         String emailUsername = etUsernameMail.getText().toString();
         String password      = etPassword.getText().toString();
 
-        Map request = new HashMap();
 
-        request.put("username", emailUsername);
-        request.put("password", password);
-        JSONObject req = getJsonObjectFromMap(request);
-        Log.d("login",req.toString());
+                if (emailUsername.isEmpty() || password.isEmpty()) {
 
-        Log.d ("Login", "Making Login Request with object " + request.toString());
-        Map resp = makeRequest(new URL("http://192.168.1.4:8000/api/v1/login"), request);
+                    etUsernameMail.setText("");
+                    etPassword.setText("");
+                    }
+                else {
+
+                    Map request = new HashMap();
+                    request.put("username", emailUsername);
+                    request.put("password", password);
+                    JSONObject req = getJsonObjectFromMap(request);
+
+
+
+
+                }
+
+
+
+
+
+
 
     }
 

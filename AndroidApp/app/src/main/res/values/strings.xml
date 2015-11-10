@@ -6,4 +6,5 @@
     <string name="title_activity_register">Register</string>
     <string name="registerLinkS">Register Here</string>
     <string name="loginS">Login</string>
+    <string name="title_activity_after__login">After_Login</string>
 </resources>

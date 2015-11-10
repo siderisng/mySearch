@@ -27,23 +27,23 @@
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
-        android:inputType="textPassword"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         />
 
     <Button
         android:id="@+id/bLogin"
-        android:text="@string/loginS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/loginS"
         />
 
     <TextView
         android:id="@+id/registerLink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/registerLinkS"
         android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register Here"
         android:textStyle="bold" />
 
 

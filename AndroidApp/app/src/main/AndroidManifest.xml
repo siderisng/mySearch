@@ -23,6 +23,11 @@
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".After_Login"
+            android:label="@string/title_activity_after__login"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

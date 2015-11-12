@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.0\jars\classes.jar"
+        jar="C:\Users\Shadowvault\.gradle\caches\modules-2\files-2.1\com.mcxiaoke.volley\library\1.0.17\f417d7f776d1ee5858fc04d9362aa45e9bedd26b\library-1.0.17.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
-        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\classes-07ed47b97fe8166c420d01e73f75fc271e997cf2.jar" />
+        sha1="f417d7f776d1ee5858fc04d9362aa45e9bedd26b">
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\library-1.0.17-fcadd58bf4b258b5484d4cf206916776b40538c1.jar" />
     </item>
     <item
         jar="C:\Users\Shadowvault\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.0\support-annotations-23.1.0.jar"
@@ -28,6 +28,13 @@
         revision="23.0.1"
         sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
         <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\classes-adc6e8ba790a529e56f8d50784aad2eadc80df57.jar" />
+    </item>
+    <item
+        jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
+        <dex dex="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\pre-dexed\debug\classes-07ed47b97fe8166c420d01e73f75fc271e997cf2.jar" />
     </item>
     <item
         jar="C:\Users\Shadowvault\Desktop\mySearch\AndroidApp\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.0\jars\classes.jar"

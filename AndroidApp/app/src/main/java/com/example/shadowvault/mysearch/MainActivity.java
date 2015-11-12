@@ -14,6 +14,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +34,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Queue;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText etUsernameMail;
     private EditText etPassword;
     private TextView registerLink;
+    private String res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,94 +80,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void Login() throws Exception {
 
-        String emailUsername = etUsernameMail.getText().toString();
+        final String emailUsername = etUsernameMail.getText().toString();
         String password      = etPassword.getText().toString();
+        String URL           = "https://immense-peak-9102.herokuapp.com/api/v1/login";
+        RequestQueue queue = Volley.newRequestQueue(this);
 
 
-                if (emailUsername.isEmpty() || password.isEmpty()) {
+        if (emailUsername.isEmpty() || password.isEmpty()) {
 
-                    etUsernameMail.setText("");
-                    etPassword.setText("");
-                    }
-                else {
-
-                    Map request = new HashMap();
-                    request.put("username", emailUsername);
-                    request.put("password", password);
-                    JSONObject req = getJsonObjectFromMap(request);
-
-
-
-
-                }
-
-
-
-
-
-
-
-    }
-
-
-    private Map makeRequest(URL url, Map params) throws Exception
-    {
-        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-        httpCon.setDoOutput(true);
-        httpCon.setDoInput(true);
-        httpCon.setUseCaches(false);
-        httpCon.setRequestProperty("Content-Type", "application/json");
-        httpCon.setRequestProperty("Accept", "application/json");
-        httpCon.setRequestMethod("POST");
-        httpCon.connect(); // Note the connect() here
-
-        OutputStream os = httpCon.getOutputStream();
-        OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
-
-        //convert parameters into JSON object
-        JSONObject holder = getJsonObjectFromMap(params);
-
-        osw.write(holder.toString());
-        osw.flush();
-        osw.close();
-        return new HashMap();
-
-    }
-
-
-
-    private static JSONObject getJsonObjectFromMap(Map params) throws JSONException, JSONException {
-
-        Iterator iter = params.entrySet().iterator();
-
-        //Stores JSON
-        JSONObject holder = new JSONObject();
-
-        while (iter.hasNext())
-        {
-            //gets an entry in the params
-            Map.Entry pairs = (Map.Entry)iter.next();
-
-            //creates a key for Map
-            String key = (String)pairs.getKey();
-
-            //Create a new map
-            Map m = (Map)pairs.getValue();
-
-            //object for storing Json
-            JSONObject data = new JSONObject();
-
-            //gets the value
-            Iterator iter2 = m.entrySet().iterator();
-            while (iter2.hasNext())
-            {
-                Map.Entry pairs2 = (Map.Entry)iter2.next();
-                data.put((String)pairs2.getKey(), (String)pairs2.getValue());
-            }
-
-            holder.put(key, data);
+            etUsernameMail.setText("");
+            etPassword.setText("");
         }
-        return holder;
+        else {
+
+            String jsonParams = ("{\"username\":\"" +emailUsername+"\",\"password\":\""+password+"\"}");
+            JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, URL,
+
+                    new JSONObject(jsonParams),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                res = response.getString("authentication");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //   Handle Error
+                        }
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("authorization","username="+emailUsername+"&sessionCode="+ res);
+                    return headers;
+                }
+            };
+            queue.add(postRequest);
+
+        }
+
+
+
+
+
+
+
     }
 
 }

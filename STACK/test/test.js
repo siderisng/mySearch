@@ -464,6 +464,42 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			})	
 		})
 
+
+		//--------------------API/V1/USER/STATISTICS------------------------//
+		
+			
+		describe('------API /api/v1/user/statistics------',function(){
+			this.timeout(20000)
+			
+			it('Should only allow authorized users',function(done){
+			        request
+			            .get('http://localhost:8000/api/v1/user/statistics')
+			            .set('cookie',fakeCookie)
+			            .end(function(err,res){
+			                expect(err).to.exist;
+			                expect(res.status).to.equal(401);
+			                expect(res.body.message).to.equal("You are not authorized to access this content");
+			                done();		               
+			            });
+			});
+		
+			it('Should return graph charts and map data',function(done){
+			        request
+			            .get('http://localhost:8000/api/v1/user/statistics')
+			            .set('cookie', cookie)
+			            .end(function(err,res){
+			                expect(err).to.exist;
+			                expect(res.status).to.equal(200);
+			                expect(res.body.graph).to.exist;
+			                expect(res.body.chart).to.exist;
+			                expect(res.body.cities).to.exist;
+			                expect(res.body.map).to.exist;
+							done();		               
+			            });
+			});
+
+		});
+
 		//--------------------API/V1/USER/LOGOUT------------------------//
 		
 		describe('------API api/v1/user/logout------',function(){

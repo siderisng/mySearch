@@ -391,15 +391,19 @@ module.exports = function(app,tools, privateData) {
 		*
 		*@apiSuccess {String} successMessage Success message
 		*@apiSuccessExample {json} Success-Response:
-        *	  {
-        *		resultsArray : [
+        *	  		[
+		*					{
+		*						location : {lat : latitude, lng : longitude},
+		*						place_id : UNIQUE_PLACE_ID
+		*					},
+		*						...
 		*					{
 		*						location : {lat : latitude, lng : longitude},
 		*						place_id : UNIQUE_PLACE_ID
 		*					}
-		*						...
-		*					]
-        *		}
+		*	 		]
+        *		
+        *
         *
 		*@apiError 400 BAD REQUEST
 		*@apiError 401 Authorization Failed

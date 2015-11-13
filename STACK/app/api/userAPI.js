@@ -337,6 +337,7 @@ module.exports = function(app,passport,tools, privateData) {
 					return;
 				}
 
+				
 				//then find all the requests made
 				Request.find({_id : { $in: user.requestHistory}},function(err,listOfRequests){
 					if (err){

@@ -465,41 +465,6 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		})
 
 
-		//--------------------API/V1/USER/STATISTICS------------------------//
-		
-			
-		describe('------API /api/v1/user/statistics------',function(){
-			this.timeout(20000)
-			
-			it('Should only allow authorized users',function(done){
-			        request
-			            .get('http://localhost:8000/api/v1/user/statistics')
-			            .set('cookie',fakeCookie)
-			            .end(function(err,res){
-			                expect(err).to.exist;
-			                expect(res.status).to.equal(401);
-			                expect(res.body.message).to.equal("You are not authorized to access this content");
-			                done();		               
-			            });
-			});
-		
-			it('Should return graph charts and map data',function(done){
-			        request
-			            .get('http://localhost:8000/api/v1/user/statistics')
-			            .set('cookie', cookie)
-			            .end(function(err,res){
-			                expect(err).to.exist;
-			                expect(res.status).to.equal(200);
-			                expect(res.body.graph).to.exist;
-			                expect(res.body.chart).to.exist;
-			                expect(res.body.cities).to.exist;
-			                expect(res.body.map).to.exist;
-							done();		               
-			            });
-			});
-
-		});
-
 		//--------------------API/V1/USER/LOGOUT------------------------//
 		
 		describe('------API api/v1/user/logout------',function(){
@@ -819,6 +784,125 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 
 			})
 
+		describe('------API /api/v1/phone/search------',function(){
+
+			it("Shouldn't let user search for something that's not in the list",function(done){
+				var reqData = {
+					location : userLocation,
+					search_type : "bongers",
+				}
+
+				request
+			            .post('http://localhost:8000/api/v1/phone/search')
+			            .send(reqData)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			               	expect(res.body.errorMessage).to.equal("Not a valid search type")
+			                done();		               
+			            });
+
+
+			})		
+
+			it("Should return an array of locations",function(done){
+				var reqData = {
+					location 	: userLocation,
+					search_type : "cafe",
+					radius 		: 500
+				}
+
+				request
+			            .post('http://localhost:8000/api/v1/phone/search')
+			            .send(reqData)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                expect(res).to.exist;
+			                expect(res.status).to.equal(200);
+			                expect(res.body[0].location).to.exist;
+			               	expect(res.body[0].location.lng).to.exist;
+			               	expect(res.body[0].location.lat).to.exist;
+			               	expect(res.body[0].place_id).to.exist;
+			                done();		               
+			            });
+
+			})		
+		
+		})	
+		
+		
+		//--------------------API/V1/USER/STATISTICS------------------------//
+		
+			
+		describe('------API /api/v1/user/statistics------',function(){
+			this.timeout(100000)
+			var statsCookie;
+			var fakeCookie = "Another Fake cookie";
+			
+			before('Log User in to website',function(done){
+				request
+		            .post('http://localhost:8000/api/v1/login')
+		            .send({
+		                password: notYetHashed , username: tester.username
+		            })
+		            .end(function(err,res){
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
+		                statsCookie = res.headers['set-cookie'];
+		                done();
+		            });
+
+			});
+
+			it('Should only allow authorized users',function(done){
+			        request
+			            .get('http://localhost:8000/api/v1/user/statistics')
+			            .set('cookie',fakeCookie)
+			            .end(function(err,res){
+			                expect(err).to.exist;
+			                expect(res.status).to.equal(401);
+			                expect(res.body.message).to.equal("You are not authorized to access this content");
+			                done();		               
+			            });
+			});
+
+
+			it('Should return data for graph, maps, and chart objects',function(done){
+			        //wait to store changes in mongodb
+			        setTimeout(function(){
+				        request
+				            .get('http://localhost:8000/api/v1/user/statistics')
+				            .set('cookie', statsCookie)
+				            .end(function(err,res){
+				                expect(res).to.exist;
+				                expect(res.status).to.equal(200);
+				                expect(res.body.graph).to.exist;
+				                expect(res.body.chart).to.exist;
+				                expect(res.body.cities).to.exist;
+				                expect(res.body.maps).to.exist;
+								done();		               
+				            });
+			         },10000);
+			});
+
+			after('Logs User out of website',function(done){
+				request
+		            .get('http://localhost:8000/api/v1/logout')
+		            .set('cookie', statsCookie)
+			        .end(function(err,res){
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                done();
+		            });
+
+			});
+
+
+		});
+
+
 		describe('------API /api/v1/phone/user------',function(){
 
 			describe('GET REQUEST',function(){
@@ -1017,51 +1101,7 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 
 		})
 
-		describe('------API /api/v1/phone/search------',function(){
 
-			it("Shouldn't let user search for something that's not in the list",function(done){
-				var reqData = {
-					location : userLocation,
-					search_type : "bongers",
-				}
-
-				request
-			            .post('http://localhost:8000/api/v1/phone/search')
-			            .send(reqData)
-			            .set('authorization',headers)
-			            .end(function(err,res){
-			                expect(err).to.exist;
-			                expect(res.status).to.equal(400);
-			               	expect(res.body.errorMessage).to.equal("Not a valid search type")
-			                done();		               
-			            });
-
-
-			})		
-
-			it("Should return an array of locations",function(done){
-				var reqData = {
-					location 	: userLocation,
-					search_type : "cafe",
-					radius 		: 100
-				}
-
-				request
-			            .post('http://localhost:8000/api/v1/phone/search')
-			            .send(reqData)
-			            .set('authorization',headers)
-			            .end(function(err,res){
-			                expect(res).to.exist;
-			                expect(res.status).to.equal(200);
-			               	expect(res.body[0].lng).to.exist;
-			               	expect(res.body[0].lat).to.exist;
-			                done();		               
-			            });
-
-			})		
-		
-		})	
-		
 
 		describe('------API /api/v1/phone/user/logout------',function(){
 

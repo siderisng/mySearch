@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         final String emailUsername = etUsernameMail.getText().toString();
         String password      = etPassword.getText().toString();
-        String URL           = "https://immense-peak-9102.herokuapp.com/api/v1/login";
+        String URL           = "https://immense-peak-9102.herokuapp.com/api/v1/phone/login";
         RequestQueue queue = Volley.newRequestQueue(this);
 
 
@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void onResponse(JSONObject response) {
                             try {
                                 res = response.getString("authentication");
+                                //Intent intent = new Intent(getBaseContext(), MainMenu.class);
+                                //intent.putExtra("sessionCode", res);
+                                //startActivity(intent);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -110,13 +113,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //   Handle Error
+                            Toast.makeText(getApplicationContext(), error.toString() , Toast.LENGTH_LONG).show();
                         }
                     }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("authorization","username="+emailUsername+"&sessionCode="+ res);
+                    headers.put("Content-Type", "application/json; charset=utf-8");
                     return headers;
                 }
             };

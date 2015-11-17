@@ -52,7 +52,6 @@ mySearch
 											$window.location.href = '/';
 											return $q.resolve(response);
 									}else if ((response.status === 200) && ($location.path() === "/")){
-										
 											$window.location.href ='/user/info';
 											return $q.resolve(response);
 									}else	

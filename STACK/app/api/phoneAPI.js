@@ -362,9 +362,12 @@ module.exports = function(app,tools, privateData) {
 	});
 
 	
-
-
-
+	//////////////*
+	// IMPORTANT NOTE:
+	// Google places Api autocorrect offers input choice. Use
+	// it in order to let users search for results by providing a
+	// string.. Maybe in the future as an extra
+	/////////////*
 	app.route("/api/v1/phone/search")
 		
 		/**
@@ -438,10 +441,11 @@ module.exports = function(app,tools, privateData) {
 					res.status(400).send( {errorMessage : "Not a valid search type"} )
 					return;
 				}
-						
-				url = url + "type="   + req.body.search_type + "&key="
+				
+				//If it's not a default search for all
+				url = url + "type="   + req.body.search_type 
 
-				var url = url + privateData.googleApiKey
+				var url = url + "&key=" + privateData.googleApiKey
 				//send request to google Places Api
 				rp(url)
 				.then(function(resultRaw){

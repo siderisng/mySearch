@@ -15,8 +15,7 @@ angular.module('mySearch')
 				.then(
 			        function(resp){
 			        	//set to true when user is logged in
-			        	$window.localStorage.setItem('auth',true);
-			           	$state.go("menu")
+			        	$state.go("menu")
 			        },
 			        function(err){
 			           Notification.error(err.data.errorMessage);
@@ -36,7 +35,6 @@ angular.module('mySearch')
 					.then(
 				        function(resp){
 				 			//set to true when user is logged in
-				 			$window.localStorage.setItem('auth',true);
 				        	$state.go("menu")
 				        },
 				        function(err){

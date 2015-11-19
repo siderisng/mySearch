@@ -432,7 +432,7 @@ module.exports = function(app,tools, privateData) {
 						return;
 					} 
 				//specify location
-				url = url + location.longitude + "," + location.latitude + "&" 
+				url = url +  location.latitude  + "," +location.longitude+ "&" 
 				//specify radius
 				url = url + "radius=" + ((req.body.radius)?req.body.radius:KILOMETER) + "&"
 				//specify search type
@@ -472,7 +472,7 @@ module.exports = function(app,tools, privateData) {
 			res.send(returnArray);
 
 			//Now get user Location using geolocation
-			var url = GOOGLE_GEO_URL + 'latlng=' + location.longitude + ',' + location.latitude + '&key=' + privateData.googleApiKey;
+			var url = GOOGLE_GEO_URL + 'latlng=' + location.latitude  + ',' + location.longitude + '&key=' + privateData.googleApiKey;
 			rp(url)
 				.then(function(resultRaw){
 					var resp = JSON.parse(resultRaw);

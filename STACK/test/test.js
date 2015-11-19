@@ -31,12 +31,12 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		var notYetHashed; //User password before hashing
 		var cookie;		 //Cookie to use through the session
 		var fakeCookie = "I'm A Little Fake Cookie"; //Fake cookie to test security
-			
+		this.timeout(20000)	
 		//--------------------API/V1/LOGIN------------------------//
 
 		//before anything happens create fake user 
 		before('Create and log fake User in',function(done){
-			this.timeout(20000)
+			
 			//create fake user with fake credentials with fake fakity fakes fakers ....
 			tester = new User({	email 		: chance.email({domain: 'test.com'}),
 									password 	: chance.string(),
@@ -417,29 +417,59 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			           		});
 			           });
 			    });
+			
+				it("Shouldn't allow users change their email to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: chance.first(),
+									email 		: tester.email
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/user')
+			            .send(toChange)
+			            .set('cookie',cookie)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+	
+
+				it("Shouldn't allow users change their username to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: tester.username,
+									email 		: chance.email({domain : "fakers.com"})
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/user')
+			            .send(toChange)
+			            .set('cookie',cookie)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+		
+
+
 			})	
 		})
+
 
 		//--------------------API/V1/USER/LOGOUT------------------------//
 		
 		describe('------API api/v1/user/logout------',function(){
 			this.timeout(20000)
 
-			//login user after logout
-			after(function (done,err) {
-		        request
-			            .post('http://localhost:8000/api/v1/login')
-			            .send({
-			                password: notYetHashed , username: tester.email
-			            })
-			            .end(function(err,res){
-			                expect(res).to.exist;
-			                expect(res.status).to.equal(200);
-			                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
-			                cookie = res.headers['set-cookie'];
-			                done();
-			            });
-			});
 
 
 			it('Should only allow authorized users',function(done){
@@ -487,7 +517,12 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 		var fakeHeaders//fake headers
 		var tester;
 		var notYetHashed;
+		var userLocation = {
+			longitude : 39.363508,
+			latitude  : 22.950609
+		}
 		this.timeout(20000)
+
 
 		//before anything happens create fake user 
 		before('Create and log fake phone User in',function(done){
@@ -749,6 +784,125 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 
 			})
 
+		describe('------API /api/v1/phone/search------',function(){
+
+			it("Shouldn't let user search for something that's not in the list",function(done){
+				var reqData = {
+					location : userLocation,
+					search_type : "bongers",
+				}
+
+				request
+			            .post('http://localhost:8000/api/v1/phone/search')
+			            .send(reqData)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			               	expect(res.body.errorMessage).to.equal("Not a valid search type")
+			                done();		               
+			            });
+
+
+			})		
+
+			it("Should return an array of locations",function(done){
+				var reqData = {
+					location 	: userLocation,
+					search_type : "cafe",
+					radius 		: 500
+				}
+
+				request
+			            .post('http://localhost:8000/api/v1/phone/search')
+			            .send(reqData)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                expect(res).to.exist;
+			                expect(res.status).to.equal(200);
+			                expect(res.body[0].location).to.exist;
+			               	expect(res.body[0].location.lng).to.exist;
+			               	expect(res.body[0].location.lat).to.exist;
+			               	expect(res.body[0].place_id).to.exist;
+			                done();		               
+			            });
+
+			})		
+		
+		})	
+		
+		
+		//--------------------API/V1/USER/STATISTICS------------------------//
+		
+			
+		describe('------API /api/v1/user/statistics------',function(){
+			this.timeout(100000)
+			var statsCookie;
+			var fakeCookie = "Another Fake cookie";
+			
+			before('Log User in to website',function(done){
+				request
+		            .post('http://localhost:8000/api/v1/login')
+		            .send({
+		                password: notYetHashed , username: tester.username
+		            })
+		            .end(function(err,res){
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                expect(res.body.successMessage).to.contain("You successfully logged in!!!")
+		                statsCookie = res.headers['set-cookie'];
+		                done();
+		            });
+
+			});
+
+			it('Should only allow authorized users',function(done){
+			        request
+			            .get('http://localhost:8000/api/v1/user/statistics')
+			            .set('cookie',fakeCookie)
+			            .end(function(err,res){
+			                expect(err).to.exist;
+			                expect(res.status).to.equal(401);
+			                expect(res.body.message).to.equal("You are not authorized to access this content");
+			                done();		               
+			            });
+			});
+
+
+			it('Should return data for graph, maps, and chart objects',function(done){
+			        //wait to store changes in mongodb
+			        setTimeout(function(){
+				        request
+				            .get('http://localhost:8000/api/v1/user/statistics')
+				            .set('cookie', statsCookie)
+				            .end(function(err,res){
+				                expect(res).to.exist;
+				                expect(res.status).to.equal(200);
+				                expect(res.body.graph).to.exist;
+				                expect(res.body.chart).to.exist;
+				                expect(res.body.cities).to.exist;
+				                expect(res.body.maps).to.exist;
+								done();		               
+				            });
+			         },5000);
+			});
+
+			after('Logs User out of website',function(done){
+				request
+		            .get('http://localhost:8000/api/v1/logout')
+		            .set('cookie', statsCookie)
+			        .end(function(err,res){
+		                expect(res).to.exist;
+		                expect(res.status).to.equal(200);
+		                done();
+		            });
+
+			});
+
+
+		});
+
+
 		describe('------API /api/v1/phone/user------',function(){
 
 			describe('GET REQUEST',function(){
@@ -899,10 +1053,55 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 			            	})
 			           });
 			    });
+
+
+			    it("Shouldn't allow users change their email to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: chance.first(),
+									email 		: tester.email
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/phone/user')
+			            .send(toChange)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+	
+
+				it("Shouldn't allow users change their username to something that already exists",function(done){
+			        var toChange = {
+			        				username 	: tester.username,
+									email 		: chance.email({domain : "fakers.com"})
+								}
+					//store new password			
+					notYetHashed = toChange.password			
+			        request
+			            .post('http://localhost:8000/api/v1/phone/user')
+			            .send(toChange)
+			            .set('authorization',headers)
+			            .end(function(err,res){
+			                //check if request ok
+		                	expect(err).to.exist;
+			                expect(res.status).to.equal(400);
+			                expect(res.body.errorMessage).to.equal("We are sorry username or email you entered are taken")
+			                done();
+			           });
+			    });
+		
+
 			})
 
 		})
-		
+
+
 
 		describe('------API /api/v1/phone/user/logout------',function(){
 
@@ -926,9 +1125,6 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 								});		    
 			            })
 			})
-
-
 		})
-	
 	});
 });

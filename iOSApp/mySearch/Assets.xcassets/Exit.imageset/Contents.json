@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "iphone",
+      "filename" : "exit.pdf",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "exit2x.pdf",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "exit3x.pdf",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

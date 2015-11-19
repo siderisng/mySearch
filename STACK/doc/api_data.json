@@ -338,15 +338,15 @@
             "group": "Parameter",
             "type": "<p>json</p> ",
             "optional": false,
-            "field": "User",
-            "description": "<p>'s username or email in the field username and password on password</p> "
+            "field": "Current",
+            "description": "<p>User Location, query,radius</p> "
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "   {\n\t\tlocation : {\n\t\t\tlongtitude :\tlocation_longtitude,\n\t\t\tlatitude   :\tlocation_latitude\n\t\t},\n\t\tsearch_type : what_user_is_looking_for\n\t}",
+          "content": "   {\n\t\tlocation : {\n\t\t\tlongitude :\tlocation_longtitude,\n\t\t\tlatitude   :\tlocation_latitude\n\t\t},\n\t\tsearch_type : what_user_is_looking_for,\n\t\tradius\t\t: radius for search (default 1 KLM)\n\t}",
           "type": "json"
         }
       ]
@@ -366,7 +366,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "  {\n\tresultsArray : [\n\n\n\t\t\t]\n\t}",
+          "content": "  {\n\tresultsArray : [\n\t\t\t\t{\n\t\t\t\t\tlocation : {lat : latitude, lng : longitude},\n\t\t\t\t\tplace_id : UNIQUE_PLACE_ID\n\t\t\t\t}\n\t\t\t\t\t...\n\t\t\t\t]\n\t}",
           "type": "json"
         }
       ]
@@ -472,6 +472,82 @@
             "optional": false,
             "field": "401",
             "description": "<p>Authorization Failed</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "{errorMessage: ERROR_MESSAGE }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "app/api/phoneAPI.js",
+    "groupTitle": "Phone"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/phone/statistics",
+    "title": "Returns a list of data ready to be plotted(graphs,maps,etc)",
+    "name": "phoneStats",
+    "group": "Phone",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example: ",
+          "content": "{\n\t\"authorization\": \"username=<user_username>&sessionCode=<code_we_gave_you_in_login>\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "successMessage",
+            "description": "<p>Success message</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " \n{\n\t\tgraph \t\t:  Array_dates-nofRequest_in_dates,\n\t\tchart \t\t:  Array_queries-nofRequest_to_these_queries,\n\t\tcities \t\t:  cities,\n\t\tmaps\t\t:  locations\t\n\t\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "400",
+            "description": "<p>BAD REQUEST</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Authorization Failed</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Couldn't find user</p> "
           },
           {
             "group": "Error 4xx",

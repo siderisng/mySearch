@@ -10,15 +10,12 @@ angular.module('mySearch')
 		//login user in function
 		$scope.login = function(){
 
-			//hash password first
-			var hashedPwd = hashPwd($scope.passwordLog)
 
-			loginSrvc.login($scope.usernameLog,hashedPwd)
+			loginSrvc.login($scope.usernameLog,$scope.passwordLog)
 				.then(
 			        function(resp){
 			        	//set to true when user is logged in
-			        	$window.localStorage.setItem('auth',true);
-			           	$state.go("menu")
+			        	$state.go("menu")
 			        },
 			        function(err){
 			           Notification.error(err.data.errorMessage);
@@ -32,13 +29,12 @@ angular.module('mySearch')
   			//check if passwords are the same
   			if ($scope.password === $scope.passwordRep){
   			
-  				var hashedPwd = hashPwd($scope.password)
+  				
 
-				signupSrvc.signup($scope.username, $scope.email, hashedPwd, $scope.name, $scope.surname, $scope.age)
+				signupSrvc.signup($scope.username, $scope.email, $scope.password, $scope.name, $scope.surname, $scope.age)
 					.then(
 				        function(resp){
 				 			//set to true when user is logged in
-				 			$window.localStorage.setItem('auth',true);
 				        	$state.go("menu")
 				        },
 				        function(err){
@@ -56,12 +52,7 @@ angular.module('mySearch')
 			}
   		}
 
-  		function hashPwd(password){
-
-  			var hashed = CryptoJS.MD5(password);
-    		return (hashed.toString(CryptoJS.enc.Base64));
-  		}
-
+  		
   		$scope.register = function (){
         	$scope.registerBool = !$scope.registerBool;
     	};

@@ -1,6 +1,15 @@
 STACK/node_modules
 STACK/bower_components
+MSA_STACK/node_modules
+MSA_STACK/bower_components
+DB_SERVER/node_modules
 STACK/.git
 STACK/.gitignore
 STACK/Procfile
 STACK/keys
+iOSApp/Pods
+iOSApp/icons
+.DS_STORE
+iOSApp/.DS_STORE
+iOSApp/mySearch/.DS_STORE
+AndroidApp/volley*

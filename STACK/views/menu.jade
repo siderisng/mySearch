@@ -1,8 +1,7 @@
 //////////////////////////////////////////////////////
-////////Author : chocof		//////////////////////
+////////Author : siderisng,chocof		//////////////////////
 /////// File   : views/menu.js ///////////////////////
 //////////////////////////////////////////////////////
-
 
 
 div(class="jumbotron",ng-controller='userCtrl',ng-init="__init__()")
@@ -17,7 +16,7 @@ div(class="jumbotron",ng-controller='userCtrl',ng-init="__init__()")
 						span.icon-bar
 						span.icon-bar
 						span.icon-bar
-				.navbar-collapse.collapse
+				div
 					ul.nav.navbar-nav.navbar-right
 						li
 							br
@@ -30,14 +29,14 @@ div(class="jumbotron",ng-controller='userCtrl',ng-init="__init__()")
 						li
 							br
 							br
-							a(ui-sref="userStats") myStatistics
+							a(ui-sref="menu.stats()") myStatistics
 						li
 							br
 							br
-							a(ui-sref="userGraphs") myGraphs
+							a(ui-sref="menu.maps()") myMaps
 						li
 							br
 							br
-							button.btn.btn-inverse.navbar-btn(ng-click="logout()")
-								span.glyphicon.glyphicon-log-out Logout
+							a(ng-click="logout()" href='#')
+								span Logout
 	div(ui-view='')

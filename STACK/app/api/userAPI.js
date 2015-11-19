@@ -2,11 +2,12 @@
 //////////AUTHORS :   chocof (https://github.com/chocof)/////
 //////////File :  app/api/userApi.js             /////////
 /////////////////////////////////////////////////////////////
-
+const DB_SERVER_URL		= "http://localhost:8500"
 
 var User = require('../models/userModel');        ///User's Model
-var Request = require('../models/requestModel');     ///Request's model for getting request info
- 
+
+var rp = require('request-promise');
+
 module.exports = function(app,passport,tools, privateData) {
 	
 
@@ -329,7 +330,6 @@ module.exports = function(app,passport,tools, privateData) {
 		*/
 		.get(tools.authenticateUser, function(req, res, next){
 			
-			
 			//first find user
 			User.findById(req.user, function(err,user){
 				if (err){
@@ -337,13 +337,18 @@ module.exports = function(app,passport,tools, privateData) {
 					return;
 				}
 
+				var requests = "";
+				for (var i = 0; i < user.requestHistory.length; i++){
+					if (i > 0)
+						requests = requests + "+";
+					requests  = requests + user.requestHistory[i];	
+				}
+
+				rp(DB_SERVER_URL + '/api/v1/request/'+requests+"?")
+				.then(function(listOfRequests){
 				
-				//then find all the requests made
-				Request.find({_id : { $in: user.requestHistory}},function(err,listOfRequests){
-					if (err){
-						res.status(500).send({errorMessage : "An Error Happened" + err.message})
-						return;
-					}	
+					//Transform into json
+					listOfRequests = JSON.parse(listOfRequests);
 
 					if (!listOfRequests[0]){
 						res.status(404).send({errorMessage : "Seems like you don't have any requests"})
@@ -366,35 +371,40 @@ module.exports = function(app,passport,tools, privateData) {
 
 					//booleans checking if there 
 					//is a need to create new date obj
-					for (i = 0; i < listOfRequests.length; i ++){
-						var req = listOfRequests[i];
+					for (var i = 0; i < listOfRequests.length; i ++){
+						var rqs = listOfRequests[i];
 						var needToInit 	= true;
 
+						console.log(rqs.date);
+						rqs.date = new Date(rqs.date);
+						console.log(rqs.date);
 						//Find nof queries of each type for the pie chart
-						if (!pieChartObj[req.query])
-							pieChartObj[req.query] = 0;
-						pieChartObj[req.query]++;
+						if (!pieChartObj[rqs.query])
+							pieChartObj[rqs.query] = 0;
+						pieChartObj[rqs.query]++;
 						
 						//Find nof queries made in each date
 						for (var j = 0; j < timeGraphAr.length; j ++){ //check if we have such a date
 							var entry = timeGraphAr[j]
-							if (isSameDay(entry.timestamp,req.date)){
+							if (isSameDay(entry.timestamp,rqs.date)){
 								needToInit = false;
 								timeGraphAr[j].requests++;
 								break;
 							}
 						}
 						if (needToInit)
-							timeGraphAr.push({ timestamp : req.date, requests : 1});
+							timeGraphAr.push({ timestamp : rqs.date, requests : 1});
 								
 						//add new city
-						if (cities.indexOf(req.city) < 0)
-							cities.push(req.city)
+						if (cities.indexOf(rqs.city) < 0)
+							cities.push(rqs.city)
 						
+
 						//add req locations
-						locations.push([req.city + ',' + req.country,req.location.longitude,req.location.latitude])
+						locations.push([rqs.city + ',' + rqs.country,rqs.location.longitude,rqs.location.latitude])
 					}
 
+					console.log(timeGraphAr,pieChartObj);
 					//format time
 					for (i = 0; i < timeGraphAr.length; i++){
 						timeGraphAr[i].timestamp = timeGraphAr[i].timestamp.getTime();
@@ -411,6 +421,10 @@ module.exports = function(app,passport,tools, privateData) {
 						maps		:  locations	
 					});
 					return;
+				})
+				.catch(function (err){
+					console.log("Error while getting list of users requests :" + err.message);
+					res.status(500).send({errorMessage : "An Error Occured :" + err.message});	
 				});
 			});
 		});

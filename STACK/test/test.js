@@ -884,7 +884,7 @@ describe('^^^^^^^^^^^^^^^^^^^^^^mySearch^^^^^^^^^^^^^^^^^^^^^^',function(){
 				                expect(res.body.maps).to.exist;
 								done();		               
 				            });
-			         },10000);
+			         },5000);
 			});
 
 			after('Logs User out of website',function(done){

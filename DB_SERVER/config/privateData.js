@@ -1,0 +1,9 @@
+/////////////////////////////////////////////////////////////
+//////////AUTHORS :   chocof (https://github.com/chocof)/////
+//////////File :   config/privateData.js  	   		/////////
+/////////////////////////////////////////////////////////////
+
+//database url to read from
+module.exports = {
+	'url' 			: 'mongodb://chocof:choco@ds035583.mongolab.com:35583/mysearchdb'
+}

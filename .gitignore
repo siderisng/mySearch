@@ -1,5 +1,7 @@
 STACK/node_modules
 STACK/bower_components
+MSA_STACK/node_modules
+MSA_STACK/bower_components
 STACK/.git
 STACK/.gitignore
 STACK/Procfile

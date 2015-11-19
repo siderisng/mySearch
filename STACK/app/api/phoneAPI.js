@@ -3,8 +3,9 @@
 //////////File :  app/api/phoneAPI.js             /////////
 /////////////////////////////////////////////////////////////
 const GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/radarsearch/json?"
-const KILOMETER  = 1000
 const GOOGLE_GEO_URL    = "https://maps.googleapis.com/maps/api/geocode/json?"
+const DB_SERVER_URL		= "http://localhost:8500"
+const KILOMETER  = 1000
 //for making http requests to google API's
 var rp = require('request-promise');
 var cc = require('coupon-code');
@@ -13,8 +14,6 @@ var cc = require('coupon-code');
 var qs = require('qs');
 
 var User 	= require('../models/userModel');        ///User's Model
-var Request = require('../models/requestModel');     ///Request's model for creating new requests   
-var City 	= require('../models/cityModel');		 ///City Model (southpark again). Used for finding all city information(and again)
 
 module.exports = function(app,tools, privateData) {
 
@@ -477,7 +476,7 @@ module.exports = function(app,tools, privateData) {
 			rp(url)
 				.then(function(resultRaw){
 					var resp = JSON.parse(resultRaw);
-					storeResToDB(user,location,resp.results[1],returnArray,req.body.search_type)
+					createRequest(user,location,resp.results[1],returnArray,req.body.search_type)
 				})
 				.catch(function (err){
 					console.log("Error during geolocation post " + err.message);	
@@ -486,52 +485,85 @@ module.exports = function(app,tools, privateData) {
 
 		};
 
-		function storeResToDB(user,location,locationG,arrayWithResp, search_type){
+		function createRequest(user,location,locationG,arrayWithResp, search_type){
 			//parse request to find city info
 			var locInfo 	= locationG.formatted_address.split(',');
 			var cityLoc    	= locInfo[0].replace(/\s+/, "") 
 			var countryLoc 	= locInfo[1].replace(/\s+/, "") 
 				
 			//create new Request	
-			var newReq = new Request({ country 			: countryLoc,
-										city   			: cityLoc,
-										location		: location,
-										query			: search_type,
-										googleResults 	: arrayWithResp,
-										date 			: new Date()	
-										});
-			//now find the city where this request where made
-			//in the database
-			City.findOne({name : cityLoc},function(err,city){
+			var newReq = { 	country 			: countryLoc,
+							city   			: cityLoc,
+							location		: location,
+							query			: search_type,
+							googleResults 	: arrayWithResp,
+							date 			: new Date()	
+						};
+			var options = {
+			    method: 'POST',
+			    uri: DB_SERVER_URL + "/api/v1/request",
+			    body: newReq,
+			    json: true // Automatically stringifies the body to JSON 
+			};	
 
-				//if there is not such city create a new one
-				if (!city){
-					city = new City({ name : cityLoc});
+			//Save New Request			
+			rp(options)
+				.then(function(reqId){
+					//now add new request to user list of requests
+					user.requestHistory.push(reqId.id);
+					//continue with the city
+					editCity(cityLoc,locationG,reqId.id,user)
+				})
+				.catch(function (err){
+					console.log("Error during new Request Creation " + err.message);	
+				});
+			
+		}
 
-					city.location.northeast.longitude 	= locationG.geometry.bounds.northeast.lng;
-					city.location.northeast.latitude 	= locationG.geometry.bounds.northeast.lat;
-					city.location.southwest.longitude 	= locationG.geometry.bounds.southwest.lng;
-					city.location.southwest.latitude 	= locationG.geometry.bounds.southwest.lat;
-				}
-				//add new request to city
-				city.listOfRequests.push(newReq._id);
+		function editCity(cityLoc,locationG,reqId,user){
+			//create new city object
+			var city = {
+				name : cityLoc,
+				location : {
+				   	northeast: {
+				   		longitude	: locationG.geometry.bounds.northeast.lng,
+						latitude 	: locationG.geometry.bounds.northeast.lat
+					},
+					southwest : {
+							longitude 	: locationG.geometry.bounds.southwest.lng,
+							latitude 	: locationG.geometry.bounds.southwest.lat
+					}
+				},
+				request  : reqId
+			};
 
-				//now add new request to user list of requests
-				user.requestHistory.push(newReq);
+			var options = {
+			    method: 'POST',
+			    uri: DB_SERVER_URL + "/api/v1/city",
+			    body: city,
+			    json: true // Automatically stringifies the body to JSON 
+			};	
+			rp(options)
+				.then(function(data){
+					console.log(data.message);
+					if (user)
+						saveUser(user);
+				})
+				.catch(function(err){
+					console.log("Error During city edit" + err.message);
+				})
 
-				//now save each and every one of them
-				saveToDB([user,newReq,city]);	
 
+		}
+
+		function saveUser(user){
+			user.save(function(err){
+				if (err)
+					console.log("Couldn't save user :" + err.message);
+				console.log("Succesfully handled search request made by user "+user.username);
 			})
 		}
 
-		function saveToDB(stack){
-			var entity = stack.pop();
-			if (entity)
-				entity.save(function(err){
-					saveToDB(stack)
-				})
-		}
 
 
 	app.route("/api/v1/phone/user/logout")

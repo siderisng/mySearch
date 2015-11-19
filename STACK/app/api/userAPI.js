@@ -337,18 +337,15 @@ module.exports = function(app,passport,tools, privateData) {
 					return;
 				}
 
-				var requests = "";
-				for (var i = 0; i < user.requestHistory.length; i++){
-					if (i > 0)
-						requests = requests + "+";
-					requests  = requests + user.requestHistory[i];	
-				}
-
-				rp(DB_SERVER_URL + '/api/v1/request/'+requests+"?")
+				var options = {
+				    method: 'POST',
+				    uri: DB_SERVER_URL + "/api/v1/request/list",
+				    body: user.requestHistory,
+				    json: true // Automatically stringifies the body to JSON 
+				};	
+			
+				rp(options)
 				.then(function(listOfRequests){
-				
-					//Transform into json
-					listOfRequests = JSON.parse(listOfRequests);
 
 					if (!listOfRequests[0]){
 						res.status(404).send({errorMessage : "Seems like you don't have any requests"})
@@ -375,9 +372,7 @@ module.exports = function(app,passport,tools, privateData) {
 						var rqs = listOfRequests[i];
 						var needToInit 	= true;
 
-						console.log(rqs.date);
 						rqs.date = new Date(rqs.date);
-						console.log(rqs.date);
 						//Find nof queries of each type for the pie chart
 						if (!pieChartObj[rqs.query])
 							pieChartObj[rqs.query] = 0;
@@ -404,7 +399,6 @@ module.exports = function(app,passport,tools, privateData) {
 						locations.push([rqs.city + ',' + rqs.country,rqs.location.longitude,rqs.location.latitude])
 					}
 
-					console.log(timeGraphAr,pieChartObj);
 					//format time
 					for (i = 0; i < timeGraphAr.length; i++){
 						timeGraphAr[i].timestamp = timeGraphAr[i].timestamp.getTime();

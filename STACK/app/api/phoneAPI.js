@@ -492,7 +492,7 @@ module.exports = function(app,tools, privateData) {
 			var countryLoc 	= locInfo[1].replace(/\s+/, "") 
 				
 			//create new Request	
-			var newReq = { 	country 			: countryLoc,
+			var newReq = { 	country 		: countryLoc,
 							city   			: cityLoc,
 							location		: location,
 							query			: search_type,

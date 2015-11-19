@@ -32,9 +32,10 @@ module.exports = function(app) {
 
 		})
 
-	app.route("/api/v1/request/:ids?")
-		.get(function(req,res){
-			var ids = req.params.ids.split("+");
+	app.route("/api/v1/request/list")
+		.post(function(req,res){
+			var ids = req.body;
+			
 			Request.find({_id : { $in: ids}},function(err,requests){
 				if (err){
 					console.log("An Error Happened while finding list of requests " + err.message);
@@ -60,7 +61,7 @@ module.exports = function(app) {
 
 				//if this city doesn't already exist create it
 				if (!city)
-					city = {
+					city = new City ({
 						name : newCity.name,
 						location : {
 						   	northeast: {
@@ -72,7 +73,7 @@ module.exports = function(app) {
 									latitude 	: newCity.location.southwest.latitude
 							}
 						}
-					}
+					});
 				//Now add new request to this city
 				city.listOfRequests.push(newCity.request);
 

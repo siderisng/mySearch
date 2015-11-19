@@ -4,8 +4,6 @@
 /////////////////////////////////////////////////////////////
 
 var User 	= require('../app/models/msaUser');        		///User's Model
-var City 	= require('../app/models/cityModel'); ///City's Model
-var Request = require('../app/models/requestModel'); ///City's Model
 
 
 //for parsing
@@ -47,58 +45,6 @@ module.exports = {
 		,"movie_rental","movie_theater","moving_company","museum","night_club","painter","park","parking","pet_store","pharmacy","physiotherapist","place_of_worship","plumber","police","post_office"
 		,"real_estate_agency","restaurant","roofing_contractor","rv_park","school","shoe_store","shopping_mall","spa"
 		,"stadium","storage","store","subway_station","synagogue","taxi_stand","train_station","travel_agency","university","veterinary_care","zoo"
-	],
-
-	//Split To Zones is the algorithm in which we divide each city
-	//to different areas it will be executed every 24 hours
-	splitToZones : function(){
-		
-		//first get all the cities	
-		City.find({},function(err,cities){
-			if (err){
-				console.log("Couldn't retrieve all the cities in splitToZones function(error :" + err.message+")");
-				return;
-			}
-			else if (!cities[0]){
-				console.log("There ain't no city in the database uh-ha");
-				return;
-			}
-
-			console.log(cities);	
-
-
-		})
-
-	}
-};
-
-
-
-/**
-*	In this function we shall process city 
-*   data and split every city in zones
-*   @params stackToTemp
-*
-**/
-function processCity(stackToTemp,stackToSave){
-
-
-
+	]
 
 }
-
-/**
-*	In this function we shall save
-*   changes made to each city
-**/
-function saveToDB(stack){
-	entity = stack.pop();
-	if (entity)
-		entity.save(function(err){
-			if (err)
-				console.log("Error While Saving Data : " + err.message);
-			saveToDB(stack);
-		});
-}
-
-

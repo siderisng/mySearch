@@ -13,12 +13,12 @@ var requestSchema = mongoose.Schema({
 	//city's location and NE and SW borders
 	location : {
 		northeast : { 
-			longitude : {type : String, default : -1},
-			latitude : {type : String, default : -1},
+			longitude : {type : Number, default : -1},
+			latitude : {type : Number, default : -1},
 		},
 		southwest :{
-			longitude : {type : String, default : -1},
-			latitude : {type : String, default : -1},
+			longitude : {type : Number, default : -1},
+			latitude : {type : Number, default : -1},
 		}
 	},
 	listOfRequests : [Schema.Types.ObjectId], //list of all requests made in this city
@@ -28,16 +28,17 @@ var requestSchema = mongoose.Schema({
 			name : String, //zone Name
 			location : { //zone location borders
 				northeast : { 
-					longitude : {type : String, default : -1},
-					latitude : {type : String, default : -1},
+					longitude : {type : Number, default : -1},
+					latitude : {type : Number, default : -1},
 				},
 				southwest :{
-					longitude : {type : String, default : -1},
-					latitude : {type : String, default : -1},
+					longitude : {type : Number, default : -1},
+					latitude : {type : Number, default : -1},
+				},
 			},
 			requests:[Schema.Types.ObjectId] //requests in this zones
-		} 	
-	}]
+	}],
+	outOfZone : [Schema.Types.ObjectId] //requests that are out of bounds
 
 });
 

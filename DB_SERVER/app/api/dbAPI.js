@@ -48,6 +48,7 @@ module.exports = function(app) {
 		})	
 
 	app.route("/api/v1/city")
+		
 		.post(function(req,res){
 
 			var newCity = req.body;
@@ -88,4 +89,24 @@ module.exports = function(app) {
 				});
 			});
 		});
+	
+	app.route("/api/v1/city/:city_name")
+		
+		.get(function(req,res){
+
+			City.findOne({name : req.params.city_name}, function(err,city){
+				if (err){
+					res.status(500).send({errorMessage : "An server Error occured : " + err.message});
+					return;
+				}
+
+				if (!city){
+					res.status(404).send({errorMessage : "Couldn't Find City " + req.params.city_name});
+					return;	
+				}
+
+				res.send(city);
+			});
+		});
+
 }

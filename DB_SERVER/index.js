@@ -55,7 +55,7 @@ conn.on('error', console.error.bind(console, 'connection error:')); //check erro
 //start interval to update ranks
 var CronJob = require('cron').CronJob;
 
-var job = new CronJob('* * 24 * * *', 
+var job = new CronJob('24 * * * * *', 
   tools.splitToZones,
   //When Process ends 
   function(){

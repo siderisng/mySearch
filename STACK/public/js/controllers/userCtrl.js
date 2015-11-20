@@ -1,6 +1,6 @@
 angular.module('mySearch')
-.controller('userCtrl',['$scope','userInfo','$state', '$window',"Notification",
-	function($scope, userInfo, $state,$window,Notification){
+.controller('userCtrl',['$scope','userInfo','$state','Auth',
+	function($scope, userInfo, $state,Auth){
 	//init variables
 	$scope.edit ={};
 	$scope.gotData = false;
@@ -67,6 +67,7 @@ angular.module('mySearch')
 				//Preview User Data
 				$scope.user = resp.info;
 				$state.go('menu.info')
+				notie.alert(1, "Welcome Back " + $scope.user.username + "!", 1.5);
 			})
 			.error(function(err){
 				$state.go('site')
@@ -77,7 +78,7 @@ angular.module('mySearch')
 	//Inits user info
 	$scope.editInfo = function(){
 		if ($scope.edit.password != $scope.edit.passwordRep){
-			Notification.error("Passwords don't match")
+			notie.alert(3, "Passwords don't match", 2.5);
 			return;
 		}
 		var changes = $scope.edit;    
@@ -88,7 +89,7 @@ angular.module('mySearch')
 				$state.go('menu.info')
 			})
 			.error(function(err){
-				Notification.error(err.errorMessage)
+				notie.alert(3, err.errorMessage, 2.5);
 			 })
 
 	}
@@ -112,25 +113,13 @@ angular.module('mySearch')
 					callback();
 				})
 				.error(function(err){
-					Notification.error(err)
+					notie.alert(3, err.errorMessage, 2.5);
 				})
 		else
 			callback();
 
 	}
 
-
-	//Logs user out
-	$scope.logout = function(){
-		userInfo.logout()
-			.success(function(resp){
-				$window.localStorage.removeItem("auth");
-				$state.go('site')
-			})
-			.error(function(err){
-			 })
-
-	}
 
 	function createCharts(){
 		//create pie chart 
@@ -190,6 +179,26 @@ angular.module('mySearch')
 			$scope.map.fitBounds(bounds);
 		}
 	}
+
+
+
+	//Logs user out
+	$scope.logout = function(){
+		notie.confirm('Are you sure you want to do that?', 'Yes', 'Cancel', function() {
+    		notie.alert(1, 'See you soon!', 2);
+
+			userInfo.logout()
+				.success(function(resp){
+					Auth.remove();
+					$state.go('site')
+				})
+				.error(function(err){
+					notie.alert(3, err.errorMessage, 2.5);
+				})
+			});
+	}
+
+
 
 }]);
 

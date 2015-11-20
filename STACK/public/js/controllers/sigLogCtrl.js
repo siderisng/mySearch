@@ -2,8 +2,8 @@
 	controller to handle user signup and login
 */
 angular.module('mySearch')
-	.controller('homeCtrl',['$scope', "Notification",'loginSrvc','signupSrvc', '$state','$window', 
-		function($scope, Notification, loginSrvc, signupSrvc, $state,$window){
+	.controller('homeCtrl',['$scope','loginSrvc','signupSrvc', '$state','$window', 
+		function($scope, loginSrvc, signupSrvc, $state,$window){
 		
 		$scope.registerBool = false;
 
@@ -18,7 +18,7 @@ angular.module('mySearch')
 			        	$state.go("menu")
 			        },
 			        function(err){
-			           Notification.error(err.data.errorMessage);
+			           notie.alert(3, "Username or password is wrong", 2.5);
 			        }
 			    )
   		}
@@ -39,7 +39,7 @@ angular.module('mySearch')
 				        },
 				        function(err){
 				           	
-				        	Notification.error(err.data.errorMessage)
+			        	   notie.alert(3, "Couldn't register user. Check your data and try again", 2.5);
 							$scope.passwordRep = "";
 							$scope.password    = "";
 				        }
@@ -47,8 +47,8 @@ angular.module('mySearch')
 			}else {
 				$scope.passwordRep = "";
 				$scope.password    = "";
-				Notification.error("Passwords Don't Match!!!");
-				
+				notie.alert(3, "Passwords don't match", 2.5);
+
 			}
   		}
 

@@ -8,11 +8,13 @@
 /*!
 	Basic module for the frontend
 */
-var mySearch = angular.module('mySearch', ['ui.bootstrap','ui.router','ngResource','ui-notification','ngCookies']);
+var mySearch = angular.module('mySearch', ['ui.bootstrap','ui.router','ngResource','ngCookies']);
 
 //This solution does not belong to me. It has been written
 //by Deividi Cavarzan in a solution he gave to Stack Overflow
 //http://stackoverflow.com/questions/17982868/angularjs-best-practice-for-ensure-user-is-logged-in-or-out-using-cookiestore
+
+//Check if user is logged in
 mySearch.factory('Auth', ['$cookieStore', function ($cookieStore) {
 				var _user = {};
 				return {
@@ -22,8 +24,7 @@ mySearch.factory('Auth', ['$cookieStore', function ($cookieStore) {
 								existing_cookie_user = $cookieStore.get('current.user');
 								_user =  _user || existing_cookie_user;
 								$cookieStore.put('current.user', _user);
-						},
-						remove: function () {
+						},remove: function () {
 								$cookieStore.remove('current.user', _user);
 						}
 				};
@@ -44,17 +45,15 @@ mySearch
 				$urlRouterProvider.otherwise('/');
 				
 				//Interceptors used to route user accordingly
-				$httpProvider.interceptors.push(function($q,$location,$window) {
+				$httpProvider.interceptors.push(function($q,$location,$cookieStore) {
 						return {
 								request: function(config){ return config; },
 								response: function(response) {  
-									if ((response.status === 401) && ($location.path().substring(0, 5) === '/user')){
+									if (response.status === 401){
 											$window.location.href = '/';
-											return $q.resolve(response);
-									}else if ((response.status === 200) && ($location.path() === "/")){
-											$window.location.href ='/user/info';
-											return $q.resolve(response);
-									}else	
+											return $q.reject(response);
+									}
+									else
 										return $q.resolve(response);									
 							}
 						};

@@ -303,7 +303,15 @@ module.exports = function(app,passport,tools, privateData) {
 	});
 
 	
-	
+	app.route("/api/v1/city/:city_name")
+		
+		.get(function(req,res){
+
+			var requestCity = req.params.city_name;
+		});	
+
+
+
 	app.route('/api/v1/user/logout')
 		
 		.get(tools.authenticateUser,function(req,res){

@@ -24,6 +24,7 @@
     "c3": "~0.4.10",
     "font-awesome": "~4.4.0",
     "reveal-highlight-themes": "~8.4.0",
-    "angular-cookies": "~1.4.7"
+    "angular-cookies": "~1.4.7",
+    "notie": "*"
   }
 }

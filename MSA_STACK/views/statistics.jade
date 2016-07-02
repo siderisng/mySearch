@@ -1,0 +1,74 @@
+div(ng-init="setState('stats')")
+	div#cont
+
+		div.autocomp(ng-show="!gotData")
+
+			h1 I want information for...
+			
+			br
+			br
+			br
+			br
+			h4 Select from the list of available cities....
+			br
+
+			btn.btn-primary.btn-lg(dropdown='')
+				a.dropdownLink(href='#', dropdown-toggle='') Select city
+					b.caret
+				ul.dropdown-menu
+					li(role="menuitem" ng-repeat="city in cities")
+						a(ng-click='findSelected(city)') {{city}}
+
+			br
+			br
+			br
+			br
+			h4 or use the search bar to find the city you're looking for...
+			br
+			autocomplete(ng-model="searchChoiceCity" data="cities" on-type="updateUserCityChoice" autocomplete-required=true) 
+			br
+			input.btn.btn-primary.btn-lg.autocomp(ng-click='searchForCity()' type='submit' value='Search' style='width:130px!important')
+					
+
+		div(ng-show="gotData")
+			.col-md-12
+				input.btn.btn-primary.btn-lg(ng-click='changeCity()' type='submit' value='<< Choose another city') 
+				h1 Info about {{selectedCity}}
+				tabset
+					tab(heading="City info" active="tab.active!='2'")
+						h3 City info
+
+						.col-md-6
+							h4 Query Ratio 
+							div(id="pieChart")
+
+						.col-md-6
+							h4 City Map
+							div(id="cityMap",  style="width: 450px; height: 350px;")
+						.col-md-12
+							h4 Requests with no answer 
+							div(id="notFoundChart")
+						.col-md-12
+							h4 Requests
+							div(id="dateGraph")
+
+						
+					tab(heading="City Zones" active="tab.active=='2'")
+						div.showNavtabs
+							h3 City zones
+							accordion( close-others="false",ng-repeat = "zone in zones",id="accordion")
+								accordion-group(ng-click='getZoneInfo(zone)',heading = "{{zone.name}}")
+									.container-fluid
+										.col-md-6.zones
+											h3 
+												b Zone Info
+											.row
+													div(id="{{'map_' + zone.name}}",  style="width: 100%; height: 350px;")
+													h4 Number Of Requests : {{zone.nofReqs}}
+										.col-md-6.zones
+											tabset(style="margin-top:30px")
+												tab(heading="Query Ratio")
+													div(id="{{'reqSuccess_' + zone.name}}")
+												tab(heading="Fail Requests")
+													div(id="{{'reqFail_' + zone.name}}")
+						

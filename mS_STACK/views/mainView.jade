@@ -1,0 +1,88 @@
+////////////////////////////////////////////////////////////////
+//////////AUTHORS :   siderisng, chocof (https://github.com/chocof) //////
+//////////File    :   views/mainView.jade           ////////////
+////////////////////////////////////////////////////////////////
+
+doctype 
+html(ng-app='mySearch')
+head
+	title mySearch
+	style
+		include styles/bootstrap.min.css
+	//Appearance stuff for dem feels
+	link(href="/c3/c3.css", rel="stylesheet", type="text/css")    
+	link(rel='stylesheet', href='/font-awesome/css/font-awesome.min.css')
+	link(rel="stylesheet" ,type="text/css", href="/reveal-highlight-themes/styles/monokai_sublime.css" id="highlight-theme")
+	link(rel="stylesheet" href="/angular-ui-notification/dist/angular-ui-notification.min.css")
+	link(href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&subset=latin,greek-ext' rel='stylesheet' type='text/css')
+
+	//favicon
+	link(rel="shortcut icon" href="/favicon.ico" type="image/x-icon")
+
+
+	style
+		include styles/c3Style.css
+		include styles/body.css
+		
+	//Very bootstrap 
+	
+	script(src="/jquery/dist/jquery.min.js")
+	script(src="/bootstrap/dist/js/bootstrap.js")
+	
+
+	
+	script(type="text/javascript" src="https://maps.googleapis.com/maps/api/js")
+		
+	//Much Angular
+	script(src='/angular/angular.min.js')
+	script(src="/angular-cookies/angular-cookies.min.js")
+	script(src="/angular-resource/angular-resource.js")
+	script(src='/angular-bootstrap/ui-bootstrap-tpls.min.js')
+	script(src='/angular-touch/angular-touch.min.js')
+
+	//ui router to handle routing
+	script(src='/angular-ui-router/release/angular-ui-router.min.js')
+	
+	
+	//for notifications
+	script(src="/angular-ui-notification/dist/angular-ui-notification.min.js")
+
+	//for creating graphs
+	script(src="/d3/d3.min.js", charset="utf-8")
+	script(src="/c3/c3.min.js")    
+
+
+	//our scripts    
+	script(src="/js/jquery_customs/signupModal.js")
+
+	
+	//notie for notifications
+	script(src="/js/scripts/notie.js")
+	
+	//Loading bars
+	script(src='/spin.js/spin.js')
+	script(src='//rawgithub.com/darthwade/angular-loading/master/angular-loading.min.js')
+	link(rel='stylesheet', type='text/css', href='/angular-loading/angular-loading.css')
+
+	//word cloud
+	
+	link(rel="stylesheet" href="/jqcloud2/dist/jqcloud.min.css")
+	script(src="/jqcloud2/dist/jqcloud.min.js")
+	script(src="/angular-jqcloud/angular-jqcloud.js")
+	//Main App 
+	script(src='/js/app/userApp.js')
+	
+	//services
+	script(src='/js/services/authSrvc.js')
+	script(src='/js/services/userSrvc.js')
+
+	//controllers    
+	script(src='/js/controllers/sigLogCtrl.js')  
+	script(src='/js/controllers/userCtrl.js')
+	//directive
+	script(src='/js/directives/directives.js')
+
+	base(href='/')
+body
+	//inject other views here
+	div(ui-view)      

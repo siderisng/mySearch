@@ -1,0 +1,37 @@
+div(ng-init="setState('info')")
+	div#cont
+		.col-md-6.info
+
+			h2 Info
+			p.infoSub Your account information. Change it 
+				a(href='/user/edit') Here
+
+			h3  username : {{user.username}}
+			h3  email : {{user.email}}
+			h3  name : {{user.name}}
+			h3  surname : {{user.surname}}
+			h3  age : {{user.age}}
+
+		.col-md-6
+
+			h2 Cities Available
+			p.infoSub These cities and many more are available 
+				a(href='/user/statistics-analysis') Here
+			img(src='/img/cities.png')
+
+		.col-md-6
+
+			h2 About mySearch
+
+			br
+			p mySearch Analytics is a statistics web service which gives information on clients about services that are needed in cities around the world.
+			br
+
+			p Clients can find the best places to open their business according to where its needed more. This can be achieved by carefully and thoroughly analyzed results gathered anonymously by the users of mySearch App (available for iOS and Android) 
+
+		.col-md-6
+			h2 Most wanted services
+
+			br
+			div(ng-repeat="req in topRequests")
+				p {{req[1]}}

@@ -1,0 +1,10 @@
+/////////////////////////////////////////////////////////////
+//////////AUTHORS :   chocof (https://github.com/chocof)/////
+//////////File :   config/session.js               /////////
+/////////////////////////////////////////////////////////////
+
+module.exports = {
+	//used by express-session and password
+	secret 		: "mySecret", 	///Sessions secret 
+	name		: "MySession"	///Sessions Name
+}

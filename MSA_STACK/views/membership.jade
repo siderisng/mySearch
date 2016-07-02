@@ -1,0 +1,40 @@
+div(ng-init="setState('member')")
+	div#cont
+		
+		.col-md-12
+			.center-block.fullW
+
+				h2 Expired Membership or you want some more??
+				| Expiration Date : {{expires}}
+				br
+				p mySearch Analytics isn't free. You need to purchase membership to use the statistics we provide you
+				br
+				br
+				br
+
+				p We suggest you buy the 12-month-membership 
+
+				br
+				br
+				br
+				br
+			
+				form(action='https://www.paypal.com/cgi-bin/webscr', method='post', target='_top')
+					input(type='hidden', name='cmd', value='_s-xclick')
+					input(type='hidden', name='hosted_button_id', value='PZYVS6RQ6UQB8')
+					table
+						tr
+							td
+								input(type='hidden', name='on0', value='Buy Months')
+								| Choose a membership renewal/extension
+						tr
+							td
+								select.form-control input-lg(name='os0')
+									option(value='1 month') 1 month €3.00 EUR
+									option(value='3 months') 3 months €7.00 EUR
+									option(value='9 months') 9 months €12.00 EUR
+									option(value='12 months') 12 months €20.00 EUR
+					input(type='hidden', name='currency_code', value='EUR')
+					br
+					input(type='image', src='https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif', border='0', name='submit', alt='PayPal - The safer, easier way to pay online!')
+					img(alt='', border='0', src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif', width='1', height='1')

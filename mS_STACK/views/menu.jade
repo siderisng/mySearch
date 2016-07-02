@@ -1,0 +1,44 @@
+//////////////////////////////////////////////////////
+////////Author : siderisng,chocof		//////////////////////
+/////// File   : views/menu.js ///////////////////////
+//////////////////////////////////////////////////////
+
+
+div(class="jumbotron",ng-controller='userCtrl',ng-init="__init__()")
+
+	.navbar-wrapper
+		nav.navbar.navbar-inverse.navbar-static-top(role="navigation")
+			.container-fluid
+				.navbar-header
+					h1 
+							img(src='/img/logo.png')
+							font   mySearch
+					button.navbar-toggle(type="button" data-toggle="collapse" data-target=".navbar2")
+						span.sr-only Toggle navigation
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+				div.navbar2(ng-class="(windowWidth<'768')?'panel-collapse collapse':''")
+					ul.nav.navbar-nav.navbar-right
+						li
+							br
+							br
+							a(ng-class="('info'===currentState)?'active':''" ui-sref="menu.info()") myProfile
+						li
+							br
+							br
+							a(ng-class="('edit'===currentState)?'active':''" ui-sref="menu.edit()") Edit myInfo 
+						li
+							br
+							br
+							a(ng-class="('statistics'===currentState)?'active':''" ui-sref="menu.stats()") myStatistics
+						li
+							br
+							br
+							a(ng-class="('maps'===currentState)?'active':''" ui-sref="menu.maps()") myMaps
+						li
+							br
+							br
+							a(ng-click="logout()" href='#')
+								span Logout
+	div(ui-view='')

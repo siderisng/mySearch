@@ -1,0 +1,36 @@
+{
+  "name": "mySearch-Analytics",
+  "main": "index.js",
+  "version": "0.0.0",
+  "authors": [
+    "chocof<tsokos@uth.com>"
+  ],
+  "description": "Serves info about cities, requests made by mySearch etc",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "~0.13.3",
+    "angular-resource": "~1.4.5",
+    "angular-ui-router": "~0.2.15",
+    "c3": "~0.4.10",
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.4.0",
+    "reveal-highlight-themes": "~8.4.0",
+    "angular-cookies": "~1.4.7",
+    "notie": "*",
+    "angular-swipe": "~0.1.0",
+    "angular-loading": "~0.1.4",
+    "angular": "~1.4.8",
+    "jqcloud2": "~2.0.1",
+    "angular-jqcloud": "~1.0.2",
+    "angular-touch": "~1.4.8",
+    "angular-feeds": "~0.0.4",
+    "jquery": "~2.1.4",
+    "allmighty-autocomplete": "*"
+  }
+}

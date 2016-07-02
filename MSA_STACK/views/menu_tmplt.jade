@@ -1,0 +1,67 @@
+div(ng-controller="userCtrl", ng-init="__init__()")
+	//add a toolbar or whatever here and after that
+	//inject all the other views here
+	div#nav
+		h2 mySearch Analytics
+		br
+		br
+		br
+		#hiddennav
+			btn.btn-default.btn(dropdown='')
+					a.dropdownLink(href='#', dropdown-toggle='') Select menu
+						b.caret
+					ul.dropdown-menu
+						li 
+							a(ng-class="('info'===thisState)?'activeNav':''" ui-sref="menu.info()") Dashboard	
+						li 
+							a(ng-click="" ng-class="('stats'===thisState)?'activeNav':''" ui-sref="menu.stats()") Statistics & Analysis
+							div(collapse='isCollapsed')
+								a(class="subnav" ng-class=" (tab.active!='2')?'activeNav':''  " ng-click="tab.active = '1' ") City Info
+								a(class="subnav" ng-class=" (tab.active=='2')?'activeNav':''  " ng-click="tab.active = '2' ") City Zones
+						li 
+							a(ng-class="('search'===thisState)?'activeNav':''" ui-sref="menu.search()") Search for service
+							hr
+						li
+							a(ng-class="('edit'===thisState)?'activeNav':''" ui-sref="menu.edit()") Edit Info
+						li
+							a(ng-class="('member'===thisState)?'activeNav':''" ui-sref="menu.member()") Membership
+						li
+							a(ng-class="('contact'===thisState)?'activeNav':''" ui-sref="menu.contact()") Contact
+						li
+
+							a(ng-click="logout()" href='#')
+								span Logout	
+
+		#visiblenav
+			ul
+				li 
+					a(ng-class="('info'===thisState)?'activeNav':''" ui-sref="menu.info()") Dashboard	
+				li 
+					a(ng-click="" ng-class="('stats'===thisState)?'activeNav':''" ui-sref="menu.stats()") Statistics & Analysis
+					div(collapse='isCollapsed')
+						a(class="subnav" ng-class=" (tab.active!='2')?'activeNav':''  " ng-click="tab.active = '1' ") City Info
+						a(class="subnav" ng-class=" (tab.active=='2')?'activeNav':''  " ng-click="tab.active = '2' ") City Zones
+				li 
+					a(ng-class="('search'===thisState)?'activeNav':''" ui-sref="menu.search()") Search for service
+					hr
+				li
+					a(ng-class="('edit'===thisState)?'activeNav':''" ui-sref="menu.edit()") Edit Info
+				li
+					a(ng-class="('member'===thisState)?'activeNav':''" ui-sref="menu.member()") Membership
+				li
+					a(ng-class="('contact'===thisState)?'activeNav':''" ui-sref="menu.contact()") Contact
+				li
+					br
+					br
+
+					a(ng-click="logout()" href='#')
+						span Logout	
+				li
+					br
+					br
+					hr
+					p.copyrightNav Copyright &copy; 2015 mSA
+
+		
+
+	div(ui-view="")

@@ -1,0 +1,53 @@
+div(ng-init="gatherData('info')", ng-swipe-right="swipeRight('info')",ng-swipe-left="swipeLeft('info')")
+	div(id="infoContainer")
+		.col-md-6
+			h2(class='pinfo') 
+				i(class="fa fa-user")
+				&nbsp;Personal Info
+			p.infoSub Your account information. Change it 
+				a(href="user/edit") here
+			form
+				.form-group
+					h3 Email : {{user.email}}
+				.form-group
+					h3 Username : {{user.username}}
+				.form-group
+					h3 Name : {{user.name}}
+				.form-group
+					h3 Surname : {{user.surname}}
+				.form-group
+					h3 Age : {{user.age}}	
+		.col-md-6
+			div(dw-loading='info', dw-loading-options="{text: 'Loading cities...'}",ng-show="gotData")
+				h2(class='pinfo')
+					i(class="fa fa-bar-chart")
+					&nbsp; Popular cities
+				p.infoSub Your most visited cities. More statistics 
+					a(href="user/statistics") here
+					div(id="barChart")
+		.col-md-6		
+			div(dw-loading='info', dw-loading-options="{text: 'Loading map...'}",ng-show="gotData")
+				h2(class='pinfo')
+					i(class="fa fa-map-marker")
+					&nbsp; Map
+				p.infoSub A map of recent searches. More detail 
+					a(href="user/maps") here
+					div(id="cityMap")
+		.col-md-6		
+			h2(class='pinfo') 
+				i(class="fa fa-mobile")
+				&nbsp;You don't have the app yet?
+			p.infoSub 
+				&nbsp;mySearch is available for 
+				i(class="fa fa-apple") 
+				&nbsp;and 
+				i(class="fa fa-android") 
+				&nbsp;phones
+			img(src="/img/apps.png" style="padding-top:50px")
+
+div#footer
+	p mySearch &copy; 2015 | Created by MontyBits. All Rights Reserved. 
+							br
+							font(style='font-size:13px;') Pin logo designed by 
+								a(href='https://www.iconfinder.com/nitishkmrk' target='_blank') nitishkmrk 
+							font(style='font-size:13px;') under CC license

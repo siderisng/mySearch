@@ -1,0 +1,36 @@
+div(ng-init="setState('search')")
+	div#cont
+		.col-md-12
+			.center-block.fullW
+				div(ng-show="!searchComplete" class="autocomp")
+					h2 Find where a service is mostly needed
+					p Here you can search for a service and the results will be the cities that have requested this service (successful and failed requests)
+					p eg. Search for "Restaurant"
+					br
+					br
+					br
+					br
+					h3 Search for :
+						autocomplete(ng-model="searchChoice" data="queryTypes" on-type="updateUserChoice" autocomplete-required=true) 
+						input.btn.btn-info.btn-lg.autocomp(ng-click='searchQuery()' type='submit' value='Search')
+				div(ng-show="searchComplete" class="searchCompl")
+					input.btn.btn-primary.btn-lg(ng-click='changeQuery()' type='submit' value='<< Search for other query')
+					h4 Requests for query {{searchChoice}} in cities :
+					div(id="qryCityBar")
+
+					br
+					br
+					h3 City zones
+								accordion( close-others="false",ng-repeat = "city in qCities",id="accordion")
+									accordion-group(ng-click='getCityInfo(city)',heading = "{{city}}")
+										.container-fluid
+											a(ng-click="statsCity(city)") See Statistics for this city
+											.row
+
+												.col-xs-12
+													h4 Number of Requests : {{qCityInfo[city].queries}}
+												.col-xs-12
+													h4 Answers per Request : {{qCityInfo[city].answers | number : 2}}
+												.col-xs-12
+													h4 Requests without answer : {{qCityInfo[city].notFound}} 
+											

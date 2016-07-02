@@ -1,0 +1,31 @@
+div(ng-init="gatherData('maps')" style="overflow:hidden;" ng-swipe-right="swipeRight('map')",ng-swipe-left="swipeLeft('map')")
+
+	div(id="mapContainer" style="")
+		.col-sm-12
+			div(dw-loading='maps', dw-loading-options="{text: 'Loading map...'}",ng-show="gotData")
+				h3 
+						i(class="fa fa-map")
+						&nbsp;Your requests on the map : 
+		div(style="width:100%; position: relative;padding-right:1px;")
+			div(id='map',ng-swipe-disable-mouse)
+
+		
+		.col-md-6
+			div(ng-if="!gotData")
+				h2(class='pinfo') 
+					i(class="fa fa-mobile")
+					&nbsp;You don't have the app yet?
+				p.infoSub 
+					&nbsp;mySearch is available for 
+					i(class="fa fa-apple") 
+					&nbsp;and 
+					i(class="fa fa-android") 
+					&nbsp;phones
+				img(src="/img/apps.png" style="padding-top:50px")			
+	
+div#footer
+	p mySearch &copy; 2015 | Created by MontyBits. All Rights Reserved. 
+							br
+							font(style='font-size:13px;') Pin logo designed by 
+								a(href='https://www.iconfinder.com/nitishkmrk' target='_blank') nitishkmrk 
+							font(style='font-size:13px;') under CC license

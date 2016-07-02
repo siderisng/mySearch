@@ -1,0 +1,45 @@
+div(ng-init="gatherData('statistics')", ng-swipe-right="swipeRight('stats')",ng-swipe-left="swipeLeft('stats')")
+	div(id="infoContainer")
+		.col-md-6
+			div(dw-loading='stats', dw-loading-options="{text: 'Loading cities...'}", ng-show="gotData")
+				h3 
+					i(class="fa fa-map-signs")
+						&nbsp;Cities you have been to so far : 
+				jqcloud(words="citiesAr" width="500" height="350" steps="7" font-size="{from:0.09, to:0.04}" delay="10")
+
+
+
+		.col-md-6
+			div(dw-loading='stats', dw-loading-options="{text: 'Loading data...'}", ng-show="gotData")
+				h3
+					i(class="fa fa-pie-chart")
+						&nbsp;Pie Chart
+					p.infoSub What type of services were you searching for?
+				div(id="pieChart")
+
+		.col-md-12
+			div(dw-loading='stats', dw-loading-options="{text: 'Loading Search Rate...'}", ng-show="gotData")
+				h3 
+					i(class="fa fa-line-chart")
+						&nbsp;Dategraph of requests 
+					p.infoSub How often did I search for a service?
+				div(id="dateGraph")
+		.col-md-6		
+			div(ng-if="!gotData")
+				h2(class='pinfo') 
+					i(class="fa fa-mobile")
+						&nbsp;You don't have the app yet?
+				p.infoSub 
+						&nbsp;mySearch is available for 
+					i(class="fa fa-apple") 
+						&nbsp;and 
+					i(class="fa fa-android") 
+						&nbsp;phones
+				img(src="/img/apps.png" style="padding-top:50px")			
+
+div#footer
+	p mySearch &copy; 2015 | Created by MontyBits. All Rights Reserved. 
+							br
+							font(style='font-size:13px;') Pin logo designed by 
+								a(href='https://www.iconfinder.com/nitishkmrk' target='_blank') nitishkmrk 
+							font(style='font-size:13px;') under CC license

@@ -1,0 +1,67 @@
+div(id="editContainer",ng-init="gatherData('edit')" ng-swipe-right="swipeRight('edit')",ng-swipe-left="swipeLeft('edit')")
+	div(id="editInfo")
+	h2(style="margin-left:50px") 
+		i(class="fa fa-pencil")
+		&nbsp;Edit your Information
+		form()
+			.col-md-6
+				div(class="col-md-8 editLabels")
+					h3 
+						i(class="fa fa-male") 
+						&nbsp;Change Personal Settings
+						p.infoSub *These are not required
+					
+
+					h3(class='palette2') Change Name :
+					input.form-control(type='text',name="name", placeholder='{{user.name}}',ng-model='edit.name')
+
+					h3(class='palette2') Change Surname :
+					input.form-control(type='text',name="surname", placeholder='{{user.surname}}',ng-model='edit.surname')
+
+					h3(class='palette2') Change Age :
+					input.form-control(type='text',name="age", placeholder='{{user.age}}',ng-model='edit.age')
+
+
+					
+
+			.col-md-6
+				div(class="col-md-8 editLabels")
+					h3 
+						i(class="fa fa-sign-in") 
+						&nbsp;Change Account Settings
+
+					h3(class='palette2') Change Username :
+					div.input-group
+						span(class="input-group-addon")
+							i(class="fa fa-user fa-fw")
+						input(class="form-control" type="text" name="username" placeholder="{{user.username}}" ng-model="edit.username")
+
+					h3(class='palette2') Change email :
+					div.input-group
+						span(class="input-group-addon")
+							i(class="fa fa-envelope fa-fw")
+						input(class="form-control" type="text" name="email" placeholder="{{user.email}}" ng-model="edit.email")
+					
+					h3(class='palette2') Change Password :
+					div.input-group
+						span(class="input-group-addon")
+							i(class="fa fa-key fa-fw")
+						input(class="form-control" type="password" name="password" placeholder="Password must be more than 6 characters" ng-model="edit.password")
+					
+						
+					h4(class='palette2') Confirm Password :
+					div.input-group
+						span(class="input-group-addon")
+							i(class="fa fa-key fa-fw")
+						input(class="form-control" type="password" name="password" placeholder="Password must be more than 6 characters" ng-model="edit.passwordRep")
+					
+
+			.col-md-7(style='' class="btn-update")
+				input.btn.btn-default.btn-lg(ng-click='editInfo()' value='Update my info' type='submit' style='width:200px')
+
+div#footer
+	p mySearch &copy; 2015 | Created by MontyBits. All Rights Reserved. 
+							br
+							font(style='font-size:13px;') Pin logo designed by 
+								a(href='https://www.iconfinder.com/nitishkmrk' target='_blank') nitishkmrk 
+							font(style='font-size:13px;') under CC license

@@ -1,0 +1,159 @@
+// variables for login:
+// --usernameLog
+// --passwordLog
+//variables for signup:
+// --username, email, 
+// --password,
+// --passwordRep, 
+// --name, 
+// --surname, 
+// --age
+
+
+//When either one is succesfull you ll be redirected to menu 
+
+div(ng-controller="homeCtrl")
+	div#header
+		.col-md-5
+			h1 Welcome to mySearch Analytics
+			h3 Here you can find data and information on what service users search for, what they look for but can't find, in any city you want, categorized for your pleasure! Don't miss a chance for an amazing business opportunity!
+		.col-md-6
+			.center-block.login
+				h1 Login!
+				form
+					label Username/Email
+					div.input-group
+						span(class="input-group-addon")
+							i(class="fa fa-user fa-fw")
+						input(class="form-control" type="text" name="username" ng-model="usernameLog")
+						
+					label Password
+					div.input-group
+						span(class="input-group-addon")
+							i(class="fa fa-key fa-fw")
+						input(class="form-control" type="password" name="password" ng-model="passwordLog")
+					br
+
+
+					input.btn.btn-info.btn-lg(ng-click='login()' type='submit' value='Login')
+				h3 
+					a(href='#signup') Signup Now!
+				//signup modal to be added
+				h5
+					a(href='documentation' class='palette2' target='_top') U Developer?		
+
+
+	div#content
+
+		div#box 
+			h3 Cities
+			hr.line
+			br
+			img(src='/img/cities.png')
+			br
+			br
+			p Find any city you need all over the world!
+		div#box 
+			h3 Zones
+			hr.line
+			br
+			img(src='/img/zones.png')
+			br
+			br
+			p Data categorized in zones in a city so you find what you're looking for!
+
+
+		div#box 
+			h3 Personalized search
+			hr.line
+			br
+			img(src='/img/search.jpg')
+			br
+			br
+			p Find out which cities need the service you want to open the most!
+
+
+		div#box 
+			h3 mySearch App
+			hr.line
+			br
+			img(src='/img/app.png')
+			br
+			br
+			p All the data is taken by mySearch app users. The app is available in 
+				a Apple App Store 
+				span and
+				a  Google Play
+
+
+		div#box 
+			h3 GitHub
+			hr.line
+			br
+			img(src='/img/github.png')
+			br
+			br
+			p Check out our Project, fork it and report issues
+
+		
+		div#box 
+			h3 Made in Volos
+			hr.line
+			br
+			img(src='/img/thessaly.jpg' height='220')
+			br
+			br
+			p Made in University of Thessaly as part of a project
+
+	div#signup
+
+
+		h2 SIGNUP
+		form.form-horizontal(name='inputForm')
+			.form-group
+				label.control-label.col-sm-2 Email(*):
+				.col-sm-10
+					input.form-control(type='email', name="email" ,placeholder='Enter email',ng-model="email", required)
+					div
+						.error(ng-show='inputForm.email.$error.required')
+							small.error
+							| Your email is required.
+			.form-group
+				label.control-label.col-sm-2 Username(*):
+				.col-sm-10
+					input.form-control(type='text',name="username", placeholder='Enter Username',ng-model="username",required)
+					div
+						.error(ng-show='inputForm.username.$error.required')
+							small.error
+							| Your username Is required
+			.form-group
+				label.control-label.col-sm-2 Password(*):
+				.col-sm-10
+					input.form-control(type='password',name="password", placeholder='Enter Password(at least 6 characters)',ng-model="password",required)
+					.error(ng-show='inputForm.password.$error.required')
+							small.error
+							| Your password is required
+			.form-group
+				label.control-label.col-sm-2 Repeat Password(*):
+				.col-sm-10
+					input.form-control(type='password',name="passwordRep", placeholder='Please Repeat Password',ng-model="passwordRep",required)			
+					.error(ng-show='inputForm.passwordRep.$error.required')
+							small.error
+							| You are required to validate password
+			.form-group
+				label.control-label.col-sm-2 Name:
+				.col-sm-10
+					input.form-control(type='text', placeholder='Enter Username',ng-model="name")
+			.form-group
+				label.control-label.col-sm-2 Surname:
+				.col-sm-10
+					input.form-control(type='text', placeholder='Enter Username',ng-model="surname")
+			.form-group
+				.col-sm-10		
+					button.btn.btn-default.btn-lg(ng-if="!inputForm.email.$error.required && !inputForm.username.$error.required && !inputForm.password.$error.required && !inputForm.passwordRep.$error.required", ng-click='signup()') Signup
+
+	.col-md-12.footerh
+		hr
+		br
+		br
+		p Copyright &copy; 2015 mySearch Analytics. All rights reserved. Statistics are gathered by the mySearch app.

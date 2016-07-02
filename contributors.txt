@@ -1,5 +1,0 @@
-Authors : chocof,
-	  gejioka,
-	  panagiotis-tzimotoudis,
-	  siderisng
-
